@@ -27,7 +27,7 @@ export class GameComponent {
   }
 
   //Cambio giocatore
-  cambiaGiocatore(currentPlayer: string) {
+  changePlayer(currentPlayer: string) {
     if (currentPlayer === 'CPU_1') {
       this.currentPlayer = 'CPU_2';
     } else {

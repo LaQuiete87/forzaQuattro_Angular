@@ -14,7 +14,7 @@ export class GameServiceService {
     }
   }
   //Se la plancia è piena la partita è pareggiata
-  pareggio(grid: string[][]): boolean {
+  draw(grid: string[][]): boolean {
     // Verifica se la griglia è completa: se viene trovato almeno uno 0 la partita sicuramente non è terminata
     for (let riga of grid) {
       for (let cella of riga) {
@@ -26,4 +26,27 @@ export class GameServiceService {
     console.log('Partita pareggiata');
     return true;
   }
+
+  //Data una cella inserisci la pedina(nome giocatore) nella cella
+  placePawn(
+    player: string,
+    rowIndex: number,
+    colIndex: number,
+    grid: string[][]
+  ) {
+    grid[rowIndex][colIndex] = player;
+  }
+
+  //Data una cella verifica se quella sotto è piena, se sì ritorna true
+  cellMinusOne(rowIndex: number, colIndex: number, grid: string[][]): boolean {
+    return grid[rowIndex][colIndex - 1] !== null;
+  }
+
+  //Dato una combinazione di 4 caselle, identifica dov'è la cella vuota. Restituisce la cella vuota
+  // identifyEmptyCell(combination: string[]) {
+  //   combination.find((element, index) => {
+  //     element === null;
+  //     return index
+  //   });
+  // }
 }
