@@ -42,13 +42,7 @@ export class GameServiceService {
     return grid[rowIndex][colIndex - 1] !== null;
   }
 
-  //Dato una combinazione di 4 caselle, identifica dov'è la cella vuota. Restituisce la cella vuota
-  // identifyEmptyCell(combination: string[]) {
-  //   combination.find((element, index) => {
-  //     element === null;
-  //     return index
-  //   });
-  // }
+
 
   //CERCA COMBINAZIONI DI QUATERNE IN ORIZZONTALE \ VERTICALE\ OBLIQUO DESTO E SINISTRO
   forza4Horizontal(
@@ -162,9 +156,9 @@ export class GameServiceService {
     return false;
   }
 
-  //CERCA TRIO SENSATO ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
+  //BLOCCA O VINCI: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
 
-  //Cerca un trio sensato orizzontale e restituisce le coordinate della cella da occupare (obbligatoriamente perché porta ad una vincita/blocco certi)
+  //Cerca un trio sensato e restituisce le coordinate della cella da occupare (obbligatoriamente perché porta ad una vincita/blocco certi)
   findTrioeHorizontal(numRow: number,numCol: number,grid: string[][],currentPlayer: string) {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
@@ -363,7 +357,8 @@ export class GameServiceService {
     return false;
   }
 
-  //CERCA COPPIA SENSATA ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
+  //FAI TRIO: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
+  //Cerca una coppia che permetta di fare un trio sensato e restituisce le coordinate della cella da occupare
   findCoupleHorizontal(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
@@ -437,8 +432,17 @@ export class GameServiceService {
     }
     return false;
   }
- 
+
+ findCoupleDiagonal(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {
+}
+findcoupleVertical(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {
 
 }
 
+//FAI DUO: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
+  //Cerca una cella singola che permetta di fare un duo sensato e restituisce le coordinate della cella da occupare
 
+  findSingleHorizontal(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {}
+  findSingleDiagonal(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {}
+  findSingleVertical(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {}
+}
