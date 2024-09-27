@@ -40,15 +40,7 @@ export class GameServiceService {
     return true;
   }
 
-  //Data una cella inserisci la pedina(nome giocatore) nella cella
-  // placePawn(
-  //   player: string,
-  //   rowIndex: number,
-  //   colIndex: number,
-  //   grid: string[][]
-  // ) {
-  //   grid[rowIndex][colIndex] = player;
-  // }
+
   placePawn(
     player: string,
     numRow:number,
@@ -112,7 +104,7 @@ export class GameServiceService {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
         let indiceColonna = 0;
-        indiceColonna <= numCol - 1;
+        indiceColonna <numCol;
         indiceColonna++
       ) {
         // console.log(`Controllo verticale: (${indiceRiga}, ${indiceColonna})`);
@@ -209,7 +201,7 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna + 1] === player &&
           grid[indiceRiga][indiceColonna + 2] === player &&
           grid[indiceRiga][indiceColonna + 3] === null &&
-          grid[indiceRiga + 1]?.[indiceColonna + 3] != null
+          (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna + 3] !== null)
         ) {
           console.log('Trio orizzontale sensato');
           return indiceColonna + 3;
@@ -220,7 +212,7 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna + 1] === player &&
           grid[indiceRiga][indiceColonna + 2] === null &&
           grid[indiceRiga][indiceColonna + 3] === player &&
-          grid[indiceRiga + 1]?.[indiceColonna + 2] != null
+          (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna + 2] !== null)
         ) {
           console.log('Trio orizzontale sensato');
           return indiceColonna + 2;
@@ -231,7 +223,7 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna + 1] === null &&
           grid[indiceRiga][indiceColonna + 2] === player &&
           grid[indiceRiga][indiceColonna + 3] === player &&
-          grid[indiceRiga + 1]?.[indiceColonna + 1] != null
+          (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna + 1] !== null)
         ) {
           console.log('Trio orizzontale sensato');
           return indiceColonna + 1;
@@ -243,7 +235,7 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna + 1] === player &&
           grid[indiceRiga][indiceColonna + 2] === player &&
           grid[indiceRiga][indiceColonna + 3] === player &&
-          grid[indiceRiga + 1]?.[indiceColonna] != null
+          (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna] !== null)
         ) {
           console.log('Trio orizzontale sensato');
           return indiceColonna;
@@ -307,7 +299,7 @@ export class GameServiceService {
           grid[indiceRiga - 1][indiceColonna + 1] === player &&
           grid[indiceRiga - 2][indiceColonna + 2] === player &&
           grid[indiceRiga - 3][indiceColonna + 3] === player &&
-          grid[indiceRiga + 1]?.[indiceColonna] != null
+          (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna] !== null)
         ) {
           console.log('Trio diagonale sensato ');
           return indiceColonna;
@@ -364,7 +356,8 @@ export class GameServiceService {
           grid[indiceRiga - 1][indiceColonna - 1] === player &&
           grid[indiceRiga - 2][indiceColonna - 2] === player &&
           grid[indiceRiga - 3][indiceColonna - 3] === player &&
-          grid[indiceRiga + 1]?.[indiceColonna] != null
+          (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna] !== null)
+          
         ) {
           console.log('Trio diagonale sensato ');
 
@@ -386,7 +379,7 @@ export class GameServiceService {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
         let indiceColonna = 0;
-        indiceColonna <= numCol - 1;
+        indiceColonna < numCol ;
         indiceColonna++
       ) {
         //Controllo combinazione XXXnull

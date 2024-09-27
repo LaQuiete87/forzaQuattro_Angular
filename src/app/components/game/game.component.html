@@ -22,16 +22,19 @@
           </table>
         </div>
         <div class="text-center ">
-          <button class="btn btn-secondary mt-3 w-50 p-2" (click)="play()">Gioca</button>
+          <button [disabled]="winner || draw" class="btn btn-secondary mt-3 w-50 p-2" (click)="play()">Gioca</button>
         </div>
         <!-- @if(!winner){
           <div class="text-center ">
             <button class="btn btn-info w-50" >Fake gioca</button>
           </div>
-        }
-        @if(winner){
-          <h2>{{currentPlayer}}Ha vinto con uno streak {{typeOfStreak}}</h2>
         } -->
+        @if(winner){
+          <h2>{{currentPlayer}}Ha vinto</h2>
+        }
+        @if(draw){
+          <h2>Pareggio</h2>
+        }
          
       </div>
     
