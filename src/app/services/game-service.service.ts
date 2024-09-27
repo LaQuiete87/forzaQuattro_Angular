@@ -42,9 +42,7 @@ export class GameServiceService {
     return grid[rowIndex][colIndex - 1] !== null;
   }
 
-
-
-  //CERCA COMBINAZIONI DI QUATERNE IN ORIZZONTALE \ VERTICALE\ OBLIQUO DESTO E SINISTRO
+  //VERIFICA VINCITA:  IN ORIZZONTALE \ VERTICALE\ OBLIQUO DESTO E SINISTRO
   forza4Horizontal(
     numRow: number,
     numCol: number,
@@ -117,7 +115,6 @@ export class GameServiceService {
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
-        
         if (
           grid[indiceRiga][numCol] === currentPlayer &&
           grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
@@ -159,7 +156,12 @@ export class GameServiceService {
   //BLOCCA O VINCI: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
 
   //Cerca un trio sensato e restituisce le coordinate della cella da occupare (obbligatoriamente perché porta ad una vincita/blocco certi)
-  findTrioeHorizontal(numRow: number,numCol: number,grid: string[][],currentPlayer: string) {
+  findTrioeHorizontal(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
         let indiceColonna = 0;
@@ -167,55 +169,62 @@ export class GameServiceService {
         indiceColonna++
       ) {
         //Controllo combinazione XXXnull
-        if (grid[indiceRiga][indiceColonna] === currentPlayer &&
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 3] === null &&
-          grid[indiceRiga+1][indiceColonna + 3] !=null) {
-         
-          console.log("Trio orizzontale sensato")
+          grid[indiceRiga + 1][indiceColonna + 3] != null
+        ) {
+          console.log('Trio orizzontale sensato');
           return grid[indiceRiga][indiceColonna + 3];
         }
-            //Controllo combinazione XXnullX
-            if (grid[indiceRiga][indiceColonna] === currentPlayer &&
-              grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
-              grid[indiceRiga][indiceColonna + 2] === null &&
-              grid[indiceRiga][indiceColonna + 3] === currentPlayer &&
-              grid[indiceRiga+1][indiceColonna + 2] !=null) {
-             
-                console.log("Trio orizzontale sensato")
-                return grid[indiceRiga][indiceColonna + 2]
-            }
+        //Controllo combinazione XXnullX
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 2] === null &&
+          grid[indiceRiga][indiceColonna + 3] === currentPlayer &&
+          grid[indiceRiga + 1][indiceColonna + 2] != null
+        ) {
+          console.log('Trio orizzontale sensato');
+          return grid[indiceRiga][indiceColonna + 2];
+        }
         //Controllo combinazione XnullXX
-        if (grid[indiceRiga][indiceColonna] === currentPlayer &&
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 1] === null &&
           grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 3] === currentPlayer &&
-          grid[indiceRiga+1][indiceColonna + 1] !=null) {
-         
-            console.log("Trio orizzontale sensato")
-            return grid[indiceRiga][indiceColonna + 1]
+          grid[indiceRiga + 1][indiceColonna + 1] != null
+        ) {
+          console.log('Trio orizzontale sensato');
+          return grid[indiceRiga][indiceColonna + 1];
         }
 
-         //Controllo combinazione nullXXX
-         if (grid[indiceRiga][indiceColonna] === null &&
+        //Controllo combinazione nullXXX
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 3] === currentPlayer &&
-          grid[indiceRiga+1][indiceColonna] !=null) {
-         
-            console.log("Trio orizzontale sensato")
-            return grid[indiceRiga][indiceColonna]
+          grid[indiceRiga + 1][indiceColonna] != null
+        ) {
+          console.log('Trio orizzontale sensato');
+          return grid[indiceRiga][indiceColonna];
         }
-
-      
       }
     }
     return false;
   }
-  findTrioeDiagonal(numRow: number, numCol: number, grid: string[][],currentPlayer: string) {
+  findTrioeDiagonal(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-       //trio diagonale destro
+      //trio diagonale destro
       for (
         let indiceColonna = 0;
         indiceColonna <= numCol - 4;
@@ -227,51 +236,51 @@ export class GameServiceService {
           grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
           grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
           grid[indiceRiga - 3][indiceColonna + 3] === null &&
-          grid[indiceRiga-2][indiceColonna + 3] !=null
+          grid[indiceRiga - 2][indiceColonna + 3] != null
         ) {
           console.log('Trio diagonale sensato ');
-       
-          return  grid[indiceRiga - 3][indiceColonna + 3];
+
+          return grid[indiceRiga - 3][indiceColonna + 3];
         }
 
-             //Controllo combinazione XXnullX
-             if (
-              grid[indiceRiga][numCol] === currentPlayer &&
-              grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
-              grid[indiceRiga - 2][indiceColonna + 2] === null &&
-              grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
-              grid[indiceRiga - 1][indiceColonna + 2] !=null
-            ) {
-              console.log('Trio diagonale sensato ');
-           
-              return grid[indiceRiga - 2][indiceColonna + 2];
-            }
+        //Controllo combinazione XXnullX
+        if (
+          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna + 2] === null &&
+          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna + 2] != null
+        ) {
+          console.log('Trio diagonale sensato ');
 
-            //Controllo combinazione XnullXX
-            if (
-              grid[indiceRiga][numCol] === currentPlayer &&
-              grid[indiceRiga - 1][indiceColonna + 1] === null &&
-              grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
-              grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
-              grid[indiceRiga][indiceColonna + 1] !=null
-            ) {
-              console.log('Trio diagonale sensato ');
-           
-              return grid[indiceRiga - 1][indiceColonna + 1];
-            }
+          return grid[indiceRiga - 2][indiceColonna + 2];
+        }
 
-             //Controllo combinazione nullXXX
-             if (
-              grid[indiceRiga][numCol] === null &&
-              grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
-              grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
-              grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
-              grid[indiceRiga+1]?.[indiceColonna] !=null
-            ) {
-              console.log('Trio diagonale sensato ');
-           
-              return grid[indiceRiga][numCol];
-            }
+        //Controllo combinazione XnullXX
+        if (
+          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna + 1] === null &&
+          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 1] != null
+        ) {
+          console.log('Trio diagonale sensato ');
+
+          return grid[indiceRiga - 1][indiceColonna + 1];
+        }
+
+        //Controllo combinazione nullXXX
+        if (
+          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
+          grid[indiceRiga + 1]?.[indiceColonna] != null
+        ) {
+          console.log('Trio diagonale sensato ');
+
+          return grid[indiceRiga][numCol];
+        }
       }
     }
     //trio diagonale sinistro
@@ -281,16 +290,16 @@ export class GameServiceService {
         indiceColonna >= 3;
         indiceColonna--
       ) {
-       //Controllo combinazione XXXnull
+        //Controllo combinazione XXXnull
         if (
           grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
           grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
           grid[indiceRiga - 3][indiceColonna - 3] === null &&
-          grid[indiceRiga-2][indiceColonna - 3] !=null
+          grid[indiceRiga - 2][indiceColonna - 3] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return  grid[indiceRiga - 3][indiceColonna - 3];
+          return grid[indiceRiga - 3][indiceColonna - 3];
         }
 
         //Controllo combinazione XXnullX
@@ -299,10 +308,10 @@ export class GameServiceService {
           grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
           grid[indiceRiga - 2][indiceColonna - 2] === null &&
           grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer &&
-          grid[indiceRiga-1][indiceColonna - 2] !=null
+          grid[indiceRiga - 1][indiceColonna - 2] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return   grid[indiceRiga - 2][indiceColonna - 2];
+          return grid[indiceRiga - 2][indiceColonna - 2];
         }
 
         //Controllo combinazione XnullXX
@@ -311,10 +320,10 @@ export class GameServiceService {
           grid[indiceRiga - 1][indiceColonna - 1] === null &&
           grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
           grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer &&
-          grid[indiceRiga][indiceColonna - 1] !=null
+          grid[indiceRiga][indiceColonna - 1] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return  grid[indiceRiga - 1][indiceColonna - 1];
+          return grid[indiceRiga - 1][indiceColonna - 1];
         }
 
         //Controllo combinazione nullXXX
@@ -323,10 +332,10 @@ export class GameServiceService {
           grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
           grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
           grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer &&
-          grid[indiceRiga+1]?.[indiceColonna] !=null  
+          grid[indiceRiga + 1]?.[indiceColonna] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return  grid[indiceRiga][indiceColonna];
+          return grid[indiceRiga][indiceColonna];
         }
       }
     }
@@ -334,9 +343,14 @@ export class GameServiceService {
     return false;
   }
 
-  findTrioeVertical(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {
-     //streak verticale
-     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+  findTrioeVertical(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
+    //streak verticale
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
         let indiceColonna = 0;
         indiceColonna <= numCol - 1;
@@ -347,7 +361,7 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga - 1][indiceColonna] === currentPlayer &&
           grid[indiceRiga - 2][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna] === null 
+          grid[indiceRiga - 3][indiceColonna] === null
         ) {
           console.log('Trio verticale sensato ');
           return grid[indiceRiga - 3][indiceColonna];
@@ -359,7 +373,12 @@ export class GameServiceService {
 
   //FAI TRIO: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
   //Cerca una coppia che permetta di fare un trio sensato e restituisce le coordinate della cella da occupare
-  findCoupleHorizontal(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {
+  findCoupleHorizontal(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
         let indiceColonna = 0;
@@ -367,82 +386,586 @@ export class GameServiceService {
         indiceColonna++
       ) {
         //Controllo combinazione XXnullnull
-        if (grid[indiceRiga][indiceColonna] === currentPlayer &&
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 2] === null &&
-          grid[indiceRiga][indiceColonna + 3] === null) {
-            if(grid[indiceRiga+1]?.[indiceColonna + 2] !== null){
-              console.log("Coppia orizzontale sensata")
-              return grid[indiceRiga][indiceColonna + 2]
-            }
-            if(grid[indiceRiga+1]?.[indiceColonna + 3] !== null){
-              console.log("Coppia orizzontale sensata")
-              return grid[indiceRiga][indiceColonna + 3]
-            }
-         
-         
-         
-        }
-          //Controllo combinazione XnullnullX
-          if (grid[indiceRiga][indiceColonna] === currentPlayer &&
-            grid[indiceRiga][indiceColonna + 1] === null &&
-            grid[indiceRiga][indiceColonna + 2] === null &&
-            grid[indiceRiga][indiceColonna + 3] === currentPlayer) {
-              if(grid[indiceRiga+1]?.[indiceColonna + 1] !== null){
-                console.log("Coppia orizzontale sensata")
-                return grid[indiceRiga][indiceColonna + 1]
-              }
-              if(grid[indiceRiga+1]?.[indiceColonna + 2] !== null){
-                console.log("Coppia orizzontale sensata")
-                return grid[indiceRiga][indiceColonna + 2]
-              }      
+          grid[indiceRiga][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna + 2] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 2];
           }
-           
+          if (grid[indiceRiga + 1]?.[indiceColonna + 3] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 3];
+          }
+        }
+        //Controllo combinazione XnullnullX
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 1] === null &&
+          grid[indiceRiga][indiceColonna + 2] === null &&
+          grid[indiceRiga][indiceColonna + 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna + 1] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 1];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 2] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 2];
+          }
+        }
+
         //Controllo combinazione nullnullXX
-        if (grid[indiceRiga][indiceColonna] === null &&
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga][indiceColonna + 1] === null &&
           grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 3] === currentPlayer) {
-            if(grid[indiceRiga+1]?.[indiceColonna] !== null){
-              console.log("Coppia orizzontale sensata")
-              return grid[indiceRiga][indiceColonna]
-            }
-            if(grid[indiceRiga+1]?.[indiceColonna + 1] !== null){
-              console.log("Coppia orizzontale sensata")
-              return grid[indiceRiga][indiceColonna + 1]
-            }      
+          grid[indiceRiga][indiceColonna + 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 1] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 1];
+          }
         }
-  
-         //Controllo combinazione nullXXnull
-         if (grid[indiceRiga][indiceColonna] === null &&
+
+        //Controllo combinazione nullXXnull
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 3] === null) {
-            if(grid[indiceRiga+1]?.[indiceColonna] !== null){
-              console.log("Coppia orizzontale sensata")
-              return grid[indiceRiga][indiceColonna]
-            }
-            if(grid[indiceRiga+1]?.[indiceColonna + 3] !== null){
-              console.log("Coppia orizzontale sensata")
-              return grid[indiceRiga][indiceColonna + 3]
-            }      
+          grid[indiceRiga][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 3] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 3];
+          }
         }
-      
       }
     }
     return false;
   }
 
- findCoupleDiagonal(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {
-}
-findcoupleVertical(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {
+  findCoupleDiagonal(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
+    // diagonale destro
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 4;
+        indiceColonna++
+      ) {
+        //Controllo combinazione XXnullnull
+        if (
+          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna + 2] === null &&
+          grid[indiceRiga - 3][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga - 1][indiceColonna + 2] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 2][indiceColonna + 2];
+          }
+          if (grid[indiceRiga - 2][indiceColonna + 3] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 3][indiceColonna + 3];
+          }
+        }
 
-}
+        //Controllo combinazione XnullnullX
+        if (
+          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna + 1] === null &&
+          grid[indiceRiga - 2][indiceColonna + 2] === null &&
+          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga][indiceColonna + 1] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 1][indiceColonna + 1];
+          }
+          if (grid[indiceRiga - 1][indiceColonna + 2] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 2][indiceColonna + 2];
+          }
+        }
 
-//FAI DUO: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
+        //Controllo combinazione nullnullXX
+        if (
+          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === null &&
+          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga + 1]?.[numCol] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga][numCol];
+          }
+          if (grid[indiceRiga][indiceColonna + 1] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 1][indiceColonna + 1];
+          }
+        }
+        //Controllo combinazione nullXXnull
+        if (
+          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[numCol] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga][numCol];
+          }
+          if (grid[indiceRiga - 2][indiceColonna + 3] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 3][indiceColonna + 3];
+          }
+        }
+      }
+    }
+    // diagonale sinistro
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = numCol - 1;
+        indiceColonna >= 3;
+        indiceColonna--
+      ) {
+        //Controllo combinazione XXnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna - 2] === null &&
+          grid[indiceRiga - 3][indiceColonna - 3] === null
+        ) {
+          if (grid[indiceRiga - 1][indiceColonna - 2] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 2][indiceColonna - 2];
+          }
+          if (grid[indiceRiga - 2][indiceColonna - 3] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 3][indiceColonna - 3];
+          }
+        }
+
+        //Controllo combinazione XnullnullX
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna - 1] === null &&
+          grid[indiceRiga - 2][indiceColonna - 2] === null &&
+          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga][indiceColonna - 1] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 1][indiceColonna - 1];
+          }
+          if (grid[indiceRiga - 1][indiceColonna - 2] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 2][indiceColonna - 2];
+          }
+        }
+
+        //Controllo combinazione nullnullXX
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga - 1][indiceColonna - 1] === null &&
+          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga][indiceColonna - 1] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 1][indiceColonna - 1];
+          }
+        }
+
+        //Controllo combinazione nullXXnull
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna - 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga - 2][indiceColonna - 3] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 3][indiceColonna - 3];
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  findcoupleVertical(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 1;
+        indiceColonna++
+      ) {
+        //Controllo combinazione XXnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna] === null &&
+          grid[indiceRiga - 3][indiceColonna] === null
+        ) {
+          console.log('Trio verticale sensato ');
+          return grid[indiceRiga - 2][indiceColonna];
+        }
+      }
+    }
+    return false;
+  }
+
+  //FAI DUO: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
   //Cerca una cella singola che permetta di fare un duo sensato e restituisce le coordinate della cella da occupare
 
-  findSingleHorizontal(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {}
-  findSingleDiagonal(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {}
-  findSingleVertical(numRow: number, numCol: number, grid: string[][], currentPlayer: string) {}
+  findSingleHorizontal(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 4;
+        indiceColonna++
+      ) {
+        //Controllo combinazione Xnullnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 1] === null &&
+          grid[indiceRiga][indiceColonna + 2] === null &&
+          grid[indiceRiga][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna + 1] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 1];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 2] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 2];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 3] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 3];
+          }
+        }
+        //Controllo combinazione nullXnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 2] === null &&
+          grid[indiceRiga][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 2] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 2];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 3] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 3];
+          }
+        }
+
+        //Controllo combinazione nullnullXnull
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga][indiceColonna + 1] === null &&
+          grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 1] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 1];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 3] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 3];
+          }
+        }
+
+        //Controllo combinazione nullnullnullX
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga][indiceColonna + 1] === null &&
+          grid[indiceRiga][indiceColonna + 2] === null &&
+          grid[indiceRiga][indiceColonna + 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 1] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 1];
+          }
+          if (grid[indiceRiga + 1]?.[indiceColonna + 2] !== null) {
+            console.log('Coppia orizzontale sensata');
+            return grid[indiceRiga][indiceColonna + 2];
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  findSingleDiagonal(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
+    // diagonale destro
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 4;
+        indiceColonna++
+      ) {
+        //Controllo combinazione Xnullnullnull
+        if (
+          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna + 1] === null &&
+          grid[indiceRiga - 2][indiceColonna + 2] === null &&
+          grid[indiceRiga - 3][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga][indiceColonna + 1] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 1][indiceColonna + 1];
+          }
+          if (grid[indiceRiga - 1][indiceColonna + 2] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 2][indiceColonna + 2];
+          }
+          if (grid[indiceRiga - 2][indiceColonna + 3] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 3][indiceColonna + 3];
+          }
+        }
+
+        //Controllo combinazione nullXnullnull
+        if (
+          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna + 2] === null &&
+          grid[indiceRiga - 3][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[numCol] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga][numCol];
+          }
+
+          if (grid[indiceRiga - 1][indiceColonna + 2] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga - 2][indiceColonna + 2];
+          }
+          if (grid[indiceRiga - 2][indiceColonna + 3] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga - 3][indiceColonna + 3];
+          }
+        }
+
+        //Controllo combinazione nullnullXnull
+        if (
+          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === null &&
+          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna + 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[numCol] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga][numCol];
+          }
+          if (grid[indiceRiga][indiceColonna + 1] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga - 1][indiceColonna + 1];
+          }
+
+          if (grid[indiceRiga - 2][indiceColonna + 3] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga - 3][indiceColonna + 3];
+          }
+        }
+        //Controllo combinazione nullnullnullX
+        if (
+          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === null &&
+          grid[indiceRiga - 2][indiceColonna + 2] === null &&
+          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga + 1]?.[numCol] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga][numCol];
+          }
+          if (grid[indiceRiga][indiceColonna + 1] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga - 1][indiceColonna + 1];
+          }
+          if (grid[indiceRiga - 1][indiceColonna + 2] != null) {
+            console.log('singolo diagonale sensato');
+            return grid[indiceRiga - 2][indiceColonna + 2];
+          }
+        }
+      }
+    }
+    // diagonale sinistro
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = numCol - 1;
+        indiceColonna >= 3;
+        indiceColonna--
+      ) {
+        //Controllo combinazione Xnullnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna - 1] === null &&
+          grid[indiceRiga - 2][indiceColonna - 2] === null &&
+          grid[indiceRiga - 3][indiceColonna - 3] === null
+        ) {
+          if (grid[indiceRiga][indiceColonna - 1] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 1][indiceColonna - 1];
+          }
+          if (grid[indiceRiga - 1][indiceColonna - 2] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 2][indiceColonna - 2];
+          }
+          if (grid[indiceRiga - 2][indiceColonna - 3] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 3][indiceColonna - 3];
+          }
+        }
+
+        //Controllo combinazione nullXnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna - 2] === null &&
+          grid[indiceRiga - 3][indiceColonna - 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+
+          if (grid[indiceRiga - 1][indiceColonna - 2] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 2][indiceColonna - 2];
+          }
+          if (grid[indiceRiga - 2][indiceColonna - 3] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 3][indiceColonna - 3];
+          }
+        }
+
+        //Controllo combinazione nullnullXnull
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga - 1][indiceColonna - 1] === null &&
+          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna - 3] === null
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga][indiceColonna - 1] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 1][indiceColonna - 1];
+          }
+
+          if (grid[indiceRiga - 2][indiceColonna - 3] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 3][indiceColonna - 3];
+          }
+        }
+
+        //Controllo combinazione nullnullnullX
+        if (
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga - 1][indiceColonna - 1] === null &&
+          grid[indiceRiga - 2][indiceColonna - 2] === null &&
+          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer
+        ) {
+          if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga][indiceColonna];
+          }
+          if (grid[indiceRiga][indiceColonna - 1] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 1][indiceColonna - 1];
+          }
+          if (grid[indiceRiga - 1][indiceColonna - 2] != null) {
+            console.log('Coppia diagonale sensata');
+            return grid[indiceRiga - 2][indiceColonna - 2];
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+  findSingleVertical(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    currentPlayer: string
+  ) {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 1;
+        indiceColonna++
+      ) {
+        //Controllo combinazione Xnullnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna] === null &&
+          grid[indiceRiga - 2][indiceColonna] === null &&
+          grid[indiceRiga - 3][indiceColonna] === null
+        ) {
+          console.log('Trio verticale sensato ');
+          return grid[indiceRiga - 1][indiceColonna];
+        }
+      }
+    }
+    return false;
+  }
 }
