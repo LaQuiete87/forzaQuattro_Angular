@@ -41,14 +41,31 @@ export class GameServiceService {
   }
 
   //Data una cella inserisci la pedina(nome giocatore) nella cella
+  // placePawn(
+  //   player: string,
+  //   rowIndex: number,
+  //   colIndex: number,
+  //   grid: string[][]
+  // ) {
+  //   grid[rowIndex][colIndex] = player;
+  // }
   placePawn(
     player: string,
-    rowIndex: number,
+    numRow:number,
     colIndex: number,
     grid: string[][]
-  ) {
-    grid[rowIndex][colIndex] = player;
+  ):boolean {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
+      if(grid[indiceRiga][colIndex]=== null){
+        grid[indiceRiga][colIndex]=player
+        return true
+      }
+    }
+    return false
   }
+
+
+
 
   //Data una cella verifica se quella sotto è piena, se sì ritorna true
   // cellMinusOne(rowIndex: number, colIndex: number, grid: string[][]): boolean {
@@ -60,22 +77,22 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ): boolean {
-    for (let indiceRiga = numRow - 1; indiceRiga >=0; indiceRiga--) {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
       for (
         let indiceColonna = 0;
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
-        console.log(`Controllo orizzontale: (${indiceRiga}, ${indiceColonna})`);
+        // console.log(`Controllo orizzontale: (${indiceRiga}, ${indiceColonna})`);
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 3] === currentPlayer
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga][indiceColonna + 1] === player &&
+          grid[indiceRiga][indiceColonna + 2] === player &&
+          grid[indiceRiga][indiceColonna + 3] === player
         ) {
-          console.log(`${currentPlayer} ha fatto streak orizzontale`);
+          console.log(`${player} ha fatto streak orizzontale`);
           // this.winner = true;
           // this.typeOfStreak = 'diagonale destro';
           return true;
@@ -89,7 +106,7 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ): boolean {
     //streak verticale
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
@@ -98,14 +115,14 @@ export class GameServiceService {
         indiceColonna <= numCol - 1;
         indiceColonna++
       ) {
-        console.log(`Controllo verticale: (${indiceRiga}, ${indiceColonna})`);
+        // console.log(`Controllo verticale: (${indiceRiga}, ${indiceColonna})`);
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna] === currentPlayer
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna] === player &&
+          grid[indiceRiga - 2][indiceColonna] === player &&
+          grid[indiceRiga - 3][indiceColonna] === player
         ) {
-          console.log(`${currentPlayer} ha fatto streak verticale`);
+          console.log(`${player} ha fatto streak verticale`);
           // this.winner = true;
           // this.typeOfStreak = 'verticale';
           return true;
@@ -119,7 +136,7 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ): boolean {
     //streak diagonale destro
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
@@ -128,14 +145,16 @@ export class GameServiceService {
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
-        console.log(`Controllo diagonale destro: (${indiceRiga}, ${indiceColonna})`);
+        // console.log(
+        //   `Controllo diagonale destro: (${indiceRiga}, ${indiceColonna})`
+        // );
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna + 1] === player &&
+          grid[indiceRiga - 2][indiceColonna + 2] === player &&
+          grid[indiceRiga - 3][indiceColonna + 3] === player
         ) {
-          console.log(`${currentPlayer} ha fatto streak diagonale destro`);
+          console.log(`${player} ha fatto streak diagonale destro`);
           // this.winner = true;
           // this.typeOfStreak = 'diagonale destro';
           return true;
@@ -144,20 +163,21 @@ export class GameServiceService {
     }
     //streak diagonale sinistro
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-
       for (
         let indiceColonna = numCol - 1;
         indiceColonna >= 3;
         indiceColonna--
       ) {
-         console.log(`Controllo diagonale sinistro: (${indiceRiga}, ${indiceColonna})`);
+        // console.log(
+        //   `Controllo diagonale sinistro: (${indiceRiga}, ${indiceColonna})`
+        // );
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna - 1] === player &&
+          grid[indiceRiga - 2][indiceColonna - 2] === player &&
+          grid[indiceRiga - 3][indiceColonna - 3] === player
         ) {
-          console.log(`${currentPlayer} ha fatto diagonale sinistro`);
+          console.log(`${player} ha fatto diagonale sinistro`);
           // this.winner = true;
           // this.typeOfStreak = 'diagonale sinistro';
           return true;
@@ -171,13 +191,13 @@ export class GameServiceService {
   //BLOCCA O VINCI: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
 
   //Cerca un trio sensato e restituisce le coordinate della cella da occupare (obbligatoriamente perché porta ad una vincita/blocco certi)
-  findTrioeHorizontal(
+  findTrioHorizontal(
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
-    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
       for (
         let indiceColonna = 0;
         indiceColonna <= numCol - 4;
@@ -185,58 +205,58 @@ export class GameServiceService {
       ) {
         //Controllo combinazione XXXnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga][indiceColonna + 1] === player &&
+          grid[indiceRiga][indiceColonna + 2] === player &&
           grid[indiceRiga][indiceColonna + 3] === null &&
-          grid[indiceRiga + 1][indiceColonna + 3] != null
+          grid[indiceRiga + 1]?.[indiceColonna + 3] != null
         ) {
           console.log('Trio orizzontale sensato');
-          return grid[indiceRiga][indiceColonna + 3];
+          return indiceColonna + 3;
         }
         //Controllo combinazione XXnullX
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga][indiceColonna + 1] === player &&
           grid[indiceRiga][indiceColonna + 2] === null &&
-          grid[indiceRiga][indiceColonna + 3] === currentPlayer &&
-          grid[indiceRiga + 1][indiceColonna + 2] != null
+          grid[indiceRiga][indiceColonna + 3] === player &&
+          grid[indiceRiga + 1]?.[indiceColonna + 2] != null
         ) {
           console.log('Trio orizzontale sensato');
-          return grid[indiceRiga][indiceColonna + 2];
+          return indiceColonna + 2;
         }
         //Controllo combinazione XnullXX
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga][indiceColonna + 1] === null &&
-          grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 3] === currentPlayer &&
-          grid[indiceRiga + 1][indiceColonna + 1] != null
+          grid[indiceRiga][indiceColonna + 2] === player &&
+          grid[indiceRiga][indiceColonna + 3] === player &&
+          grid[indiceRiga + 1]?.[indiceColonna + 1] != null
         ) {
           console.log('Trio orizzontale sensato');
-          return grid[indiceRiga][indiceColonna + 1];
+          return indiceColonna + 1;
         }
 
         //Controllo combinazione nullXXX
         if (
           grid[indiceRiga][indiceColonna] === null &&
-          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 3] === currentPlayer &&
-          grid[indiceRiga + 1][indiceColonna] != null
+          grid[indiceRiga][indiceColonna + 1] === player &&
+          grid[indiceRiga][indiceColonna + 2] === player &&
+          grid[indiceRiga][indiceColonna + 3] === player &&
+          grid[indiceRiga + 1]?.[indiceColonna] != null
         ) {
           console.log('Trio orizzontale sensato');
-          return grid[indiceRiga][indiceColonna];
+          return indiceColonna;
         }
       }
     }
     return false;
   }
-  findTrioeDiagonal(
+  findTrioDiagonal(
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       //trio diagonale destro
@@ -247,54 +267,50 @@ export class GameServiceService {
       ) {
         //Controllo combinazione XXXnull
         if (
-          grid[indiceRiga][numCol] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna + 1] === player &&
+          grid[indiceRiga - 2][indiceColonna + 2] === player &&
           grid[indiceRiga - 3][indiceColonna + 3] === null &&
           grid[indiceRiga - 2][indiceColonna + 3] != null
         ) {
           console.log('Trio diagonale sensato ');
-
-          return grid[indiceRiga - 3][indiceColonna + 3];
+          return indiceColonna + 3;
         }
 
         //Controllo combinazione XXnullX
         if (
-          grid[indiceRiga][numCol] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna + 1] === player &&
           grid[indiceRiga - 2][indiceColonna + 2] === null &&
-          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna + 3] === player &&
           grid[indiceRiga - 1][indiceColonna + 2] != null
         ) {
           console.log('Trio diagonale sensato ');
-
-          return grid[indiceRiga - 2][indiceColonna + 2];
+          return indiceColonna + 2;
         }
 
         //Controllo combinazione XnullXX
         if (
-          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna + 1] === null &&
-          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna + 2] === player &&
+          grid[indiceRiga - 3][indiceColonna + 3] === player &&
           grid[indiceRiga][indiceColonna + 1] != null
         ) {
           console.log('Trio diagonale sensato ');
-
-          return grid[indiceRiga - 1][indiceColonna + 1];
+          return indiceColonna + 1;
         }
 
         //Controllo combinazione nullXXX
         if (
-          grid[indiceRiga][numCol] === null &&
-          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === player &&
+          grid[indiceRiga - 2][indiceColonna + 2] === player &&
+          grid[indiceRiga - 3][indiceColonna + 3] === player &&
           grid[indiceRiga + 1]?.[indiceColonna] != null
         ) {
           console.log('Trio diagonale sensato ');
-
-          return grid[indiceRiga][numCol];
+          return indiceColonna;
         }
       }
     }
@@ -307,50 +323,52 @@ export class GameServiceService {
       ) {
         //Controllo combinazione XXXnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna - 1] === player &&
+          grid[indiceRiga - 2][indiceColonna - 2] === player &&
           grid[indiceRiga - 3][indiceColonna - 3] === null &&
           grid[indiceRiga - 2][indiceColonna - 3] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return grid[indiceRiga - 3][indiceColonna - 3];
+          return indiceColonna -3;
         }
 
         //Controllo combinazione XXnullX
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna - 1] === player &&
           grid[indiceRiga - 2][indiceColonna - 2] === null &&
-          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer &&
+          grid[indiceRiga - 3][indiceColonna - 3] === player &&
           grid[indiceRiga - 1][indiceColonna - 2] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return grid[indiceRiga - 2][indiceColonna - 2];
+          return indiceColonna - 2;
         }
 
         //Controllo combinazione XnullXX
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna - 1] === null &&
-          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna - 2] === player &&
+          grid[indiceRiga - 3][indiceColonna - 3] === player &&
           grid[indiceRiga][indiceColonna - 1] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return grid[indiceRiga - 1][indiceColonna - 1];
+
+          return indiceColonna - 1;
         }
 
         //Controllo combinazione nullXXX
         if (
           grid[indiceRiga][indiceColonna] === null &&
-          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna - 1] === player &&
+          grid[indiceRiga - 2][indiceColonna - 2] === player &&
+          grid[indiceRiga - 3][indiceColonna - 3] === player &&
           grid[indiceRiga + 1]?.[indiceColonna] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return grid[indiceRiga][indiceColonna];
+
+          return indiceColonna;
         }
       }
     }
@@ -358,11 +376,11 @@ export class GameServiceService {
     return false;
   }
 
-  findTrioeVertical(
+  findTrioVertical(
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
     //streak verticale
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
@@ -373,13 +391,13 @@ export class GameServiceService {
       ) {
         //Controllo combinazione XXXnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna] === player &&
+          grid[indiceRiga - 2][indiceColonna] === player &&
           grid[indiceRiga - 3][indiceColonna] === null
         ) {
           console.log('Trio verticale sensato ');
-          return grid[indiceRiga - 3][indiceColonna];
+          return indiceColonna;
         }
       }
     }
@@ -392,9 +410,9 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
-    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
       for (
         let indiceColonna = 0;
         indiceColonna <= numCol - 4;
@@ -402,8 +420,8 @@ export class GameServiceService {
       ) {
         //Controllo combinazione XXnullnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga][indiceColonna + 1] === player &&
           grid[indiceRiga][indiceColonna + 2] === null &&
           grid[indiceRiga][indiceColonna + 3] === null
         ) {
@@ -418,10 +436,10 @@ export class GameServiceService {
         }
         //Controllo combinazione XnullnullX
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga][indiceColonna + 1] === null &&
           grid[indiceRiga][indiceColonna + 2] === null &&
-          grid[indiceRiga][indiceColonna + 3] === currentPlayer
+          grid[indiceRiga][indiceColonna + 3] === player
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna + 1] !== null) {
             console.log('Coppia orizzontale sensata');
@@ -437,8 +455,8 @@ export class GameServiceService {
         if (
           grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga][indiceColonna + 1] === null &&
-          grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 3] === currentPlayer
+          grid[indiceRiga][indiceColonna + 2] === player &&
+          grid[indiceRiga][indiceColonna + 3] === player
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
             console.log('Coppia orizzontale sensata');
@@ -453,8 +471,8 @@ export class GameServiceService {
         //Controllo combinazione nullXXnull
         if (
           grid[indiceRiga][indiceColonna] === null &&
-          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
-          grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 1] === player &&
+          grid[indiceRiga][indiceColonna + 2] === player &&
           grid[indiceRiga][indiceColonna + 3] === null
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
@@ -475,7 +493,7 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
     // diagonale destro
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
@@ -486,8 +504,8 @@ export class GameServiceService {
       ) {
         //Controllo combinazione XXnullnull
         if (
-          grid[indiceRiga][numCol] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna + 1] === player &&
           grid[indiceRiga - 2][indiceColonna + 2] === null &&
           grid[indiceRiga - 3][indiceColonna + 3] === null
         ) {
@@ -503,10 +521,10 @@ export class GameServiceService {
 
         //Controllo combinazione XnullnullX
         if (
-          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna + 1] === null &&
           grid[indiceRiga - 2][indiceColonna + 2] === null &&
-          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer
+          grid[indiceRiga - 3][indiceColonna + 3] === player
         ) {
           if (grid[indiceRiga][indiceColonna + 1] != null) {
             console.log('Coppia diagonale sensata');
@@ -520,10 +538,10 @@ export class GameServiceService {
 
         //Controllo combinazione nullnullXX
         if (
-          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga - 1][indiceColonna + 1] === null &&
-          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer
+          grid[indiceRiga - 2][indiceColonna + 2] === player &&
+          grid[indiceRiga - 3][indiceColonna + 3] === player
         ) {
           if (grid[indiceRiga + 1]?.[numCol] != null) {
             console.log('Coppia diagonale sensata');
@@ -536,9 +554,9 @@ export class GameServiceService {
         }
         //Controllo combinazione nullXXnull
         if (
-          grid[indiceRiga][numCol] === null &&
-          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === player &&
+          grid[indiceRiga - 2][indiceColonna + 2] === player &&
           grid[indiceRiga - 3][indiceColonna + 3] === null
         ) {
           if (grid[indiceRiga + 1]?.[numCol] != null) {
@@ -561,8 +579,8 @@ export class GameServiceService {
       ) {
         //Controllo combinazione XXnullnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna - 1] === player &&
           grid[indiceRiga - 2][indiceColonna - 2] === null &&
           grid[indiceRiga - 3][indiceColonna - 3] === null
         ) {
@@ -578,10 +596,10 @@ export class GameServiceService {
 
         //Controllo combinazione XnullnullX
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna - 1] === null &&
           grid[indiceRiga - 2][indiceColonna - 2] === null &&
-          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer
+          grid[indiceRiga - 3][indiceColonna - 3] === player
         ) {
           if (grid[indiceRiga][indiceColonna - 1] != null) {
             console.log('Coppia diagonale sensata');
@@ -597,8 +615,8 @@ export class GameServiceService {
         if (
           grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga - 1][indiceColonna - 1] === null &&
-          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
-          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer
+          grid[indiceRiga - 2][indiceColonna - 2] === player &&
+          grid[indiceRiga - 3][indiceColonna - 3] === player
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
             console.log('Coppia diagonale sensata');
@@ -613,8 +631,8 @@ export class GameServiceService {
         //Controllo combinazione nullXXnull
         if (
           grid[indiceRiga][indiceColonna] === null &&
-          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
-          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna - 1] === player &&
+          grid[indiceRiga - 2][indiceColonna - 2] === player &&
           grid[indiceRiga - 3][indiceColonna - 3] === null
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
@@ -636,7 +654,7 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
@@ -646,8 +664,8 @@ export class GameServiceService {
       ) {
         //Controllo combinazione XXnullnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
-          grid[indiceRiga - 1][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna] === player &&
           grid[indiceRiga - 2][indiceColonna] === null &&
           grid[indiceRiga - 3][indiceColonna] === null
         ) {
@@ -666,9 +684,9 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
-    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
       for (
         let indiceColonna = 0;
         indiceColonna <= numCol - 4;
@@ -676,7 +694,7 @@ export class GameServiceService {
       ) {
         //Controllo combinazione Xnullnullnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga][indiceColonna + 1] === null &&
           grid[indiceRiga][indiceColonna + 2] === null &&
           grid[indiceRiga][indiceColonna + 3] === null
@@ -697,7 +715,7 @@ export class GameServiceService {
         //Controllo combinazione nullXnullnull
         if (
           grid[indiceRiga][indiceColonna] === null &&
-          grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 1] === player &&
           grid[indiceRiga][indiceColonna + 2] === null &&
           grid[indiceRiga][indiceColonna + 3] === null
         ) {
@@ -719,7 +737,7 @@ export class GameServiceService {
         if (
           grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga][indiceColonna + 1] === null &&
-          grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga][indiceColonna + 2] === player &&
           grid[indiceRiga][indiceColonna + 3] === null
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
@@ -741,7 +759,7 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga][indiceColonna + 1] === null &&
           grid[indiceRiga][indiceColonna + 2] === null &&
-          grid[indiceRiga][indiceColonna + 3] === currentPlayer
+          grid[indiceRiga][indiceColonna + 3] === player
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna] !== null) {
             console.log('Coppia orizzontale sensata');
@@ -765,7 +783,7 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
     // diagonale destro
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
@@ -776,7 +794,7 @@ export class GameServiceService {
       ) {
         //Controllo combinazione Xnullnullnull
         if (
-          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna + 1] === null &&
           grid[indiceRiga - 2][indiceColonna + 2] === null &&
           grid[indiceRiga - 3][indiceColonna + 3] === null
@@ -797,8 +815,8 @@ export class GameServiceService {
 
         //Controllo combinazione nullXnullnull
         if (
-          grid[indiceRiga][numCol] === null &&
-          grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === null &&
+          grid[indiceRiga - 1][indiceColonna + 1] === player &&
           grid[indiceRiga - 2][indiceColonna + 2] === null &&
           grid[indiceRiga - 3][indiceColonna + 3] === null
         ) {
@@ -819,9 +837,9 @@ export class GameServiceService {
 
         //Controllo combinazione nullnullXnull
         if (
-          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga - 1][indiceColonna + 1] === null &&
-          grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna + 2] === player &&
           grid[indiceRiga - 3][indiceColonna + 3] === null
         ) {
           if (grid[indiceRiga + 1]?.[numCol] != null) {
@@ -840,10 +858,10 @@ export class GameServiceService {
         }
         //Controllo combinazione nullnullnullX
         if (
-          grid[indiceRiga][numCol] === null &&
+          grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga - 1][indiceColonna + 1] === null &&
           grid[indiceRiga - 2][indiceColonna + 2] === null &&
-          grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer
+          grid[indiceRiga - 3][indiceColonna + 3] === player
         ) {
           if (grid[indiceRiga + 1]?.[numCol] != null) {
             console.log('singolo diagonale sensato');
@@ -869,7 +887,7 @@ export class GameServiceService {
       ) {
         //Controllo combinazione Xnullnullnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna - 1] === null &&
           grid[indiceRiga - 2][indiceColonna - 2] === null &&
           grid[indiceRiga - 3][indiceColonna - 3] === null
@@ -891,7 +909,7 @@ export class GameServiceService {
         //Controllo combinazione nullXnullnull
         if (
           grid[indiceRiga][indiceColonna] === null &&
-          grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
+          grid[indiceRiga - 1][indiceColonna - 1] === player &&
           grid[indiceRiga - 2][indiceColonna - 2] === null &&
           grid[indiceRiga - 3][indiceColonna - 3] === null
         ) {
@@ -914,7 +932,7 @@ export class GameServiceService {
         if (
           grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga - 1][indiceColonna - 1] === null &&
-          grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
+          grid[indiceRiga - 2][indiceColonna - 2] === player &&
           grid[indiceRiga - 3][indiceColonna - 3] === null
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
@@ -937,7 +955,7 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna] === null &&
           grid[indiceRiga - 1][indiceColonna - 1] === null &&
           grid[indiceRiga - 2][indiceColonna - 2] === null &&
-          grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer
+          grid[indiceRiga - 3][indiceColonna - 3] === player
         ) {
           if (grid[indiceRiga + 1]?.[indiceColonna] != null) {
             console.log('Coppia diagonale sensata');
@@ -961,7 +979,7 @@ export class GameServiceService {
     numRow: number,
     numCol: number,
     grid: string[][],
-    currentPlayer: string
+    player: string
   ) {
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
@@ -971,7 +989,7 @@ export class GameServiceService {
       ) {
         //Controllo combinazione Xnullnullnull
         if (
-          grid[indiceRiga][indiceColonna] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna] === null &&
           grid[indiceRiga - 2][indiceColonna] === null &&
           grid[indiceRiga - 3][indiceColonna] === null
@@ -986,13 +1004,20 @@ export class GameServiceService {
 
   //SE NON ESISTE UNA MOSSA SENSATA: con un numero casuale si determina la colonna, si verifica se non è piena; se piena si estrae un altro numero per un'altra colonna altrimenti cerca la casella vuota nella riga più in basso per rispettare la gravità del gioco
 
-  placePawnRandomly(colIndexRandom: number,numRow: number,grid: string[][],currentPlayer: string): boolean {
-    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
-      if (grid[indiceRiga][colIndexRandom] === null) {
-        grid[indiceRiga][colIndexRandom] = currentPlayer;
-        return true;
-      }
-    }
-    return false;
-  }
+  // placePawnRandomly(
+  //   colIndexRandom: number,
+  //   numRow: number,
+  //   grid: string[][],
+  //   player: string
+  // ): boolean {
+  //   for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
+  //     if (grid[indiceRiga][colIndexRandom] === null) {
+  //       grid[indiceRiga][colIndexRandom] = player;
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  
 }

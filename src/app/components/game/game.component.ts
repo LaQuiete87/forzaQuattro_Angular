@@ -15,6 +15,7 @@ export class GameComponent {
   numRandom: number = 0;
   randomNumber: number[] = [];
   winner: boolean = false;
+  columnIndexTarget: number = 0;
 
   constructor(private gameService: GameServiceService) {}
 
@@ -89,36 +90,45 @@ export class GameComponent {
     return;
   }
 
-  async play() {
-    const esecurion = async () => {
-      // se non esistono mosse sensate metti la pedina in una colonna casuale rispettando la gravità del gioco: chiama il metodo tryToPlaceRandomPawn()
-      console.log('*********************');
+  // async play() {
+  //   const esecurion = async () => {
 
-      await this.tryPlaceRandomPawn();
+  //     // Vinci o blocca se possibile
+  //     // se trova una combinazione vincente o da bloccare
+  //     if(this.blockOrWin()){
+  //       // inserisci la pedina nella colonna trovata e mettila in basso garantendo la gravità del gioco
+  //       this.gameService.placePawn(this.currentPlayer, this.numRow,this.columnIndexTarget,this.grid)
+  //     }
 
-      // Verifica prima se c'è un vincitore
-      this.verifyVictory();
-      console.log('Vinto?:', this.winner);
-      console.log('Grid', this.grid);
-      //se c'è un vincitore interrompi il gioco
-      if (this.winner) {
-        console.log(`${this.currentPlayer} ha vinto!`);
-        return;
-      }
-      //se non c'è un vincitore controlla il pareggio
-      else if (!this.gameService.draw(this.grid)) {
-        //Se la partita non è finita cambia giocatore
-        this.changePlayer(this.currentPlayer);
-        setTimeout(esecurion, 300);
-      } else {
-        //se la partita è pareggiata interrompi il gioco
-        console.log('Pareggio!');
-        return;
-      }
-    };
+  //     // se non esistono mosse sensate metti la pedina in una colonna casuale rispettando la gravità del gioco: chiama il metodo tryToPlaceRandomPawn()
+  //     console.log('*********************');
 
-    setTimeout(esecurion, 300);
-  }
+  //     await this.tryPlaceRandomPawn();
+
+  //     // Verifica prima se c'è un vincitore
+  //     this.verifyVictory();
+  //     console.log('Vinto?:', this.winner);
+  //     console.log('Grid', this.grid);
+  //     //se c'è un vincitore interrompi il gioco
+  //     if (this.winner) {
+  //       console.log(`${this.currentPlayer} ha vinto!`);
+  //       return;
+  //     }
+  //     //se non c'è un vincitore controlla il pareggio
+  //     else if (!this.gameService.draw(this.grid)) {
+  //       //Se la partita non è finita cambia giocatore
+
+  //       this.changePlayer(this.currentPlayer);
+  //       setTimeout(esecurion, 300);
+  //     } else {
+  //       //se la partita è pareggiata interrompi il gioco
+  //       console.log('Pareggio!');
+  //       return;
+  //     }
+  //   };
+
+  //   setTimeout(esecurion, 300);
+  // }
 
   // Metodo per provare a inserire la pedina in una colonna casuale
   async tryPlaceRandomPawn() {
@@ -138,12 +148,7 @@ export class GameComponent {
             );
 
             // Prova a piazzare la pedina, se riesce `placePawnRandomly` restituirà `true`
-            placed = this.gameService.placePawnRandomly(
-              colIndexRandom,
-              this.numRow,
-              this.grid,
-              this.currentPlayer
-            );
+            placed = this.gameService.placePawn(this.currentPlayer,this.numRow,colIndexRandom,this.grid);
 
             if (!placed) {
               // Se non è riuscito, riprova
@@ -187,13 +192,115 @@ export class GameComponent {
       );
 
     if (won) {
-      console.log('*****Hai vinto');
       this.winner = true;
+      console.log('*****Hai vinto');
+      console.log('winner', this.winner);
       return true;
     } else {
       this.winner = false;
       console.log('Non hai ancora vinto');
+      console.log('winner', this.winner);
     }
     return false;
   }
+
+  // Vinci o blocca una vincita con priorità a vincere
+  blockOrWin() {
+    const opponentPlayer = this.currentPlayer === 'CPU_1' ? 'CPU_2' : 'CPU_1';
+
+    // Controlla per vincere
+    let target = this.gameService.findTrioHorizontal(this.numRow, this.numCol, this.grid, this.currentPlayer) ||
+                 this.gameService.findTrioDiagonal(this.numRow, this.numCol, this.grid, this.currentPlayer) ||
+                 this.gameService.findTrioVertical(this.numRow, this.numCol, this.grid, this.currentPlayer);
+
+    if (target) {
+        this.columnIndexTarget = target;
+        console.log('Indice colonna da riempire per vincere', this.columnIndexTarget);
+       
+        return true; // C'è una mossa vincente
+    }
+    console.log("Non sono riuscito a vincere. Provo a bloccare")
+    // Controlla per bloccare l'avversario
+    target = this.gameService.findTrioHorizontal(this.numRow, this.numCol, this.grid, opponentPlayer) ||
+             this.gameService.findTrioDiagonal(this.numRow, this.numCol, this.grid, opponentPlayer) ||
+             this.gameService.findTrioVertical(this.numRow, this.numCol, this.grid, opponentPlayer);
+
+    if (target) {
+        this.columnIndexTarget = target;
+        console.log('Indice colonna da riempire per bloccare', this.columnIndexTarget);
+       
+        return true; // C'è una mossa di blocco
+    }
+    console.log("Non sono riuscito a bloccare")
+    return false; // Non c'è né una mossa vincente né una mossa di blocco
 }
+
+
+  async play() {
+    console.log('*********************');
+    console.log(`E' il turno di ${this.currentPlayer}`)
+    console.log(" Grid a inizio mossa", this.grid)
+    // Vinci o blocca se possibile
+    // se trova una combinazione vincente o da bloccare inserisci la pedina nella colonna trovata e mettila in basso garantendo la gravità del gioco
+    //verifica se qualcuno ha vinto
+
+    if (this.blockOrWin()) {
+      console.log("Block or win trovato, posiziona in maniera sensata")
+      this.gameService.placePawn(this.currentPlayer,this.numRow,this.columnIndexTarget,this.grid);
+      this.changePlayer(this.currentPlayer);
+      console.log(" Grid aggiornata", this.grid)
+      return
+    }
+    console.log("Nessun block or win quindi posiziona casualmente")
+    await this.tryPlaceRandomPawn() //pedina casuale
+    this.verifyVictory();
+
+    if (this.winner) {
+         console.log(`${this.currentPlayer} ha vinto!`);
+         return;
+    }
+
+    if (this.gameService.draw(this.grid)) {
+      console.log('Pareggio!')
+      return
+    }else{
+      this.changePlayer(this.currentPlayer);
+    }
+
+    console.log("Grid a fine mossa", this.grid)
+      //     //Se la partita non è finita cambia giocatore
+  
+      //     this.changePlayer(this.currentPlayer);
+      //   } else {
+      //     //se la partita è pareggiata interrompi il gioco
+      //     console.log('Pareggio!');
+      //     return;
+      //   }
+
+    // } else {
+    //   console.log("Nessun block or win quindi posiziona casualmente")
+    //   // se non esistono mosse sensate metti la pedina in una colonna casuale rispettando la gravità del gioco: chiama il metodo tryToPlaceRandomPawn()
+    //   await this.tryPlaceRandomPawn();
+
+    //   // Verifica  se c'è un vincitore
+    //   this.verifyVictory();
+
+    //   //se c'è un vincitore interrompi il gioco
+    //   if (this.winner) {
+    //     console.log(`${this.currentPlayer} ha vinto!`);
+    //     return;
+    //   }
+    //   //se non c'è un vincitore controlla il pareggio
+    //   else if (!this.gameService.draw(this.grid)) {
+    //     //Se la partita non è finita cambia giocatore
+
+    //     this.changePlayer(this.currentPlayer);
+    //   } else {
+    //     //se la partita è pareggiata interrompi il gioco
+    //     console.log('Pareggio!');
+    //     return;
+    //   }
+    }
+    
+  }
+
