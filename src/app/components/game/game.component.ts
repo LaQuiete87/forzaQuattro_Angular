@@ -14,6 +14,7 @@ export class GameComponent {
   numCol: number = 0;
   numRandom: number = 0;
   randomNumber: number[] = [];
+  winner: boolean = false;
 
   constructor(private gameService: GameServiceService) {}
 
@@ -39,6 +40,21 @@ export class GameComponent {
 
   //Genera il tabellone di gioco
   generateBoardGame(size: string) {
+    //estrai un numero per saper chi inizia
+    this.gameService.getRandomNumber(this.boardGameSize).subscribe({
+      next: (data) => {
+        console.log('***********************************');
+        console.log('Num', data);
+        console.log('Grid', this.grid);
+        this.numRandom = data;
+        //se il numero è pari inizia CPU_1 altrimenti CPU_2
+        this.whoStarts(this.numRandom);
+        console.log('Inizia', this.currentPlayer);
+      },
+      error: (err) => console.log(err),
+      complete: () => console.log('Task completato'),
+    });
+
     this.boardGameSize = size;
     this.grid = []; // Svuota la griglia
 
@@ -73,55 +89,111 @@ export class GameComponent {
     return;
   }
 
-  play() {
-    //estrai un numero per saper chi inizia
-    this.gameService.getRandomNumber(this.boardGameSize).subscribe({
-      next: (data) => {
-        console.log('Num', data);
-        console.log('Grid', this.grid);
-        this.numRandom = data;
-        //se il numero è pari inizia CPU_1 altrimenti CPU_2
-        this.whoStarts(this.numRandom);
-        console.log('Inizia', this.currentPlayer);
-      },
-      error: (err) => console.log(err),
-      complete: () => console.log('Task completato'),
-    });
+  async play() {
+    const esecurion = async () => {
+      // se non esistono mosse sensate metti la pedina in una colonna casuale rispettando la gravità del gioco: chiama il metodo tryToPlaceRandomPawn()
+      console.log('*********************');
 
-// se non esistono mosse sensate metti la pedina in una colonna casuale rispettando la gravità del gioco: chiama il metodo tryToPlaceRandomPawn()
-this.tryPlaceRandomPawn()
+      await this.tryPlaceRandomPawn();
 
- 
+      // Verifica prima se c'è un vincitore
+      this.verifyVictory();
+      console.log('Vinto?:', this.winner);
+      console.log('Grid', this.grid);
+      //se c'è un vincitore interrompi il gioco
+      if (this.winner) {
+        console.log(`${this.currentPlayer} ha vinto!`);
+        return;
+      }
+      //se non c'è un vincitore controlla il pareggio
+      else if (!this.gameService.draw(this.grid)) {
+        //Se la partita non è finita cambia giocatore
+        this.changePlayer(this.currentPlayer);
+        setTimeout(esecurion, 300);
+      } else {
+        //se la partita è pareggiata interrompi il gioco
+        console.log('Pareggio!');
+        return;
+      }
+    };
+
+    setTimeout(esecurion, 300);
   }
 
   // Metodo per provare a inserire la pedina in una colonna casuale
-tryPlaceRandomPawn() {
-  let placed = false;
+  async tryPlaceRandomPawn() {
+    let placed = false;
 
-  // Finché la pedina non viene piazzata correttamente
-  const tryToPlace = () => {
-    // Estrai un numero casuale per la colonna
-    this.gameService.getRandomNumber(this.boardGameSize).subscribe({
-      next: (data) => {
-        const colIndexRandom = data;
-        console.log('Prova ad inserire nella colonna con indice', colIndexRandom);
+    // Finché la pedina non viene piazzata correttamente
+    const tryToPlace = () => {
+      // Estrai un numero casuale per la colonna
+      return new Promise<void>((resolve, reject) => {
+        this.gameService.getRandomNumber(this.boardGameSize).subscribe({
+          next: (data) => {
+            const colIndexRandom = data;
 
-        // Prova a piazzare la pedina, se riesce `placePawnRandomly` restituirà `true`
-        placed = this.gameService.placePawnRandomly(colIndexRandom, this.numRow, this.grid, this.currentPlayer);
+            console.log(
+              'Prova ad inserire nella colonna con indice',
+              colIndexRandom
+            );
 
-        if (!placed) {
-          // Se non è riuscito, riprova
-          console.log('Colonna piena');
-          tryToPlace();
-        } else {
-          console.log(`Pedina inserita nella colonna con indice ${colIndexRandom} `);
-        }
-      },
-      error: (err) => console.log(err)
-    });
-  };
+            // Prova a piazzare la pedina, se riesce `placePawnRandomly` restituirà `true`
+            placed = this.gameService.placePawnRandomly(
+              colIndexRandom,
+              this.numRow,
+              this.grid,
+              this.currentPlayer
+            );
 
-  // Inizia il ciclo
-  tryToPlace();
-}
+            if (!placed) {
+              // Se non è riuscito, riprova
+              console.log('Colonna piena');
+              resolve(tryToPlace());
+            } else {
+              console.log(
+                `Pedina inserita nella colonna con indice ${colIndexRandom} `
+              );
+              resolve();
+            }
+          },
+          error: (err) => console.log(err),
+        });
+      });
+    };
+
+    // Inizia il ciclo
+    await tryToPlace();
+  }
+
+  verifyVictory(): boolean {
+    const won =
+      this.gameService.forza4Horizontal(
+        this.numRow,
+        this.numCol,
+        this.grid,
+        this.currentPlayer
+      ) ||
+      this.gameService.forza4Diagonal(
+        this.numRow,
+        this.numCol,
+        this.grid,
+        this.currentPlayer
+      ) ||
+      this.gameService.forza4Vertical(
+        this.numRow,
+        this.numCol,
+        this.grid,
+        this.currentPlayer
+      );
+
+    if (won) {
+      console.log('*****Hai vinto');
+      this.winner = true;
+      return true;
+    } else {
+      this.winner = false;
+      console.log('Non hai ancora vinto');
+    }
+    return false;
+  }
 }

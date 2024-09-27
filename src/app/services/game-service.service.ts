@@ -31,7 +31,7 @@ export class GameServiceService {
     // Verifica se la griglia è completa: se viene trovato almeno uno 0 la partita sicuramente non è terminata
     for (let riga of grid) {
       for (let cella of riga) {
-        if (cella === '0') {
+        if (cella === null) {
           return false;
         }
       }
@@ -62,20 +62,20 @@ export class GameServiceService {
     grid: string[][],
     currentPlayer: string
   ): boolean {
-    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+    for (let indiceRiga = numRow - 1; indiceRiga >=0; indiceRiga--) {
       for (
         let indiceColonna = 0;
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
-        //Controllo per CPU-1
+        console.log(`Controllo orizzontale: (${indiceRiga}, ${indiceColonna})`);
         if (
           grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 1] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 2] === currentPlayer &&
           grid[indiceRiga][indiceColonna + 3] === currentPlayer
         ) {
-          console.log(`${currentPlayer} ha fatto streak diagonale destro`);
+          console.log(`${currentPlayer} ha fatto streak orizzontale`);
           // this.winner = true;
           // this.typeOfStreak = 'diagonale destro';
           return true;
@@ -98,14 +98,14 @@ export class GameServiceService {
         indiceColonna <= numCol - 1;
         indiceColonna++
       ) {
-        //Controllo per CPU-1
+        console.log(`Controllo verticale: (${indiceRiga}, ${indiceColonna})`);
         if (
           grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga - 1][indiceColonna] === currentPlayer &&
           grid[indiceRiga - 2][indiceColonna] === currentPlayer &&
           grid[indiceRiga - 3][indiceColonna] === currentPlayer
         ) {
-          console.log('CPU_1 Ha fatto streak verticale ');
+          console.log(`${currentPlayer} ha fatto streak verticale`);
           // this.winner = true;
           // this.typeOfStreak = 'verticale';
           return true;
@@ -128,13 +128,14 @@ export class GameServiceService {
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
+        console.log(`Controllo diagonale destro: (${indiceRiga}, ${indiceColonna})`);
         if (
-          grid[indiceRiga][numCol] === currentPlayer &&
+          grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga - 1][indiceColonna + 1] === currentPlayer &&
           grid[indiceRiga - 2][indiceColonna + 2] === currentPlayer &&
           grid[indiceRiga - 3][indiceColonna + 3] === currentPlayer
         ) {
-          console.log('CPU_1 Ha fatto streak diagonale destro ');
+          console.log(`${currentPlayer} ha fatto streak diagonale destro`);
           // this.winner = true;
           // this.typeOfStreak = 'diagonale destro';
           return true;
@@ -143,19 +144,20 @@ export class GameServiceService {
     }
     //streak diagonale sinistro
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+
       for (
         let indiceColonna = numCol - 1;
         indiceColonna >= 3;
         indiceColonna--
       ) {
-        //Controllo per CPU-1
+         console.log(`Controllo diagonale sinistro: (${indiceRiga}, ${indiceColonna})`);
         if (
           grid[indiceRiga][indiceColonna] === currentPlayer &&
           grid[indiceRiga - 1][indiceColonna - 1] === currentPlayer &&
           grid[indiceRiga - 2][indiceColonna - 2] === currentPlayer &&
           grid[indiceRiga - 3][indiceColonna - 3] === currentPlayer
         ) {
-          console.log('CPU_1 Ha fatto streak diagonale sinistro ');
+          console.log(`${currentPlayer} ha fatto diagonale sinistro`);
           // this.winner = true;
           // this.typeOfStreak = 'diagonale sinistro';
           return true;
