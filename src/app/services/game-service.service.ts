@@ -1,18 +1,31 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameServiceService {
-  constructor() {}
+  numRandomAPI: string =
+    'https://www.random.org/integers/?num=1&min=0&col=1&base=10&format=plain&rnd=new&max=';
 
-  getRandomNumber(boardGameSize: string): number {
+  constructor(private http: HttpClient) {}
+
+  // getRandomNumber(boardGameSize: string): number {
+  //   if (boardGameSize == '5x5') {
+  //     return Math.floor(Math.random() * 5); // Restituisce un numero intero da 0 a 4
+  //   } else {
+  //     return Math.floor(Math.random() * 7); // Restituisce un numero intero da 0 a 6
+  //   }
+  // }
+  getRandomNumber(boardGameSize: string): Observable<number> {
     if (boardGameSize == '5x5') {
-      return Math.floor(Math.random() * 5); // Restituisce un numero intero da 0 a 4
+      return this.http.get<number>(`${this.numRandomAPI}${4}`);
     } else {
-      return Math.floor(Math.random() * 7); // Restituisce un numero intero da 0 a 6
+      return this.http.get<number>(`${this.numRandomAPI}${6}`);
     }
   }
+
   //Se la plancia è piena la partita è pareggiata
   draw(grid: string[][]): boolean {
     // Verifica se la griglia è completa: se viene trovato almeno uno 0 la partita sicuramente non è terminata
@@ -38,9 +51,9 @@ export class GameServiceService {
   }
 
   //Data una cella verifica se quella sotto è piena, se sì ritorna true
-  cellMinusOne(rowIndex: number, colIndex: number, grid: string[][]): boolean {
-    return grid[rowIndex][colIndex - 1] !== null;
-  }
+  // cellMinusOne(rowIndex: number, colIndex: number, grid: string[][]): boolean {
+  //   return grid[rowIndex][colIndex - 1] !== null;
+  // }
 
   //VERIFICA VINCITA:  IN ORIZZONTALE \ VERTICALE\ OBLIQUO DESTO E SINISTRO
   forza4Horizontal(
@@ -964,6 +977,18 @@ export class GameServiceService {
           console.log('Trio verticale sensato ');
           return grid[indiceRiga - 1][indiceColonna];
         }
+      }
+    }
+    return false;
+  }
+
+  //SE NON ESISTE UNA MOSSA SENSATA: con un numero casuale si determina la colonna, si verifica se non è piena; se piena si estrae un altro numero per un'altra colonna altrimenti cerca la casella vuota nella riga più in basso per rispettare la gravità del gioco
+
+  placePawnRandomly(colIndexRandom: number,numRow: number,grid: string[][],currentPlayer: string): boolean {
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
+      if (grid[indiceRiga][colIndexRandom] === null) {
+        grid[indiceRiga][colIndexRandom] = currentPlayer;
+        return true;
       }
     }
     return false;
