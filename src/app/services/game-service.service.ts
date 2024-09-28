@@ -189,6 +189,10 @@ export class GameServiceService {
     grid: string[][],
     player: string
   ) {
+    const result={
+      found:false,
+      colIndex:0
+    }
     for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
       for (
         let indiceColonna = 0;
@@ -204,7 +208,10 @@ export class GameServiceService {
           (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna + 3] !== null)
         ) {
           console.log('Trio orizzontale sensato');
-          return indiceColonna + 3;
+          result.found=true;
+          result.colIndex=indiceColonna+3;
+          return result;
+        
         }
         //Controllo combinazione XXnullX
         if (
@@ -215,7 +222,10 @@ export class GameServiceService {
           (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna + 2] !== null)
         ) {
           console.log('Trio orizzontale sensato');
-          return indiceColonna + 2;
+          result.found=true;
+          result.colIndex=indiceColonna+2;
+          return result;
+         
         }
         //Controllo combinazione XnullXX
         if (
@@ -226,7 +236,10 @@ export class GameServiceService {
           (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna + 1] !== null)
         ) {
           console.log('Trio orizzontale sensato');
-          return indiceColonna + 1;
+          result.found=true;
+          result.colIndex=indiceColonna+1;
+          return result;
+        
         }
 
         //Controllo combinazione nullXXX
@@ -238,11 +251,14 @@ export class GameServiceService {
           (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna] !== null)
         ) {
           console.log('Trio orizzontale sensato');
-          return indiceColonna;
+          result.found=true;
+          result.colIndex=indiceColonna;
+          return result;
+         
         }
       }
     }
-    return false;
+   return result
   }
   findTrioDiagonal(
     numRow: number,
@@ -250,6 +266,10 @@ export class GameServiceService {
     grid: string[][],
     player: string
   ) {
+    const result={
+      found:false,
+      colIndex:0
+    }
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       //trio diagonale destro
       for (
@@ -257,6 +277,7 @@ export class GameServiceService {
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
+        
         //Controllo combinazione XXXnull
         if (
           grid[indiceRiga][indiceColonna] === player &&
@@ -265,8 +286,11 @@ export class GameServiceService {
           grid[indiceRiga - 3][indiceColonna + 3] === null &&
           grid[indiceRiga - 2][indiceColonna + 3] != null
         ) {
+          
           console.log('Trio diagonale sensato ');
-          return indiceColonna + 3;
+          result.found=true;
+          result.colIndex=indiceColonna+3;
+          return result;
         }
 
         //Controllo combinazione XXnullX
@@ -278,7 +302,9 @@ export class GameServiceService {
           grid[indiceRiga - 1][indiceColonna + 2] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return indiceColonna + 2;
+          result.found=true;
+          result.colIndex=indiceColonna+2;
+          return result;
         }
 
         //Controllo combinazione XnullXX
@@ -290,7 +316,9 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna + 1] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return indiceColonna + 1;
+          result.found=true;
+          result.colIndex=indiceColonna+1;
+          return result;
         }
 
         //Controllo combinazione nullXXX
@@ -302,7 +330,9 @@ export class GameServiceService {
           (indiceRiga === numRow - 1 || grid[indiceRiga + 1][indiceColonna] !== null)
         ) {
           console.log('Trio diagonale sensato ');
-          return indiceColonna;
+          result.found=true;
+          result.colIndex=indiceColonna;
+          return result;
         }
       }
     }
@@ -322,7 +352,10 @@ export class GameServiceService {
           grid[indiceRiga - 2][indiceColonna - 3] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return indiceColonna -3;
+          result.found=true;
+          result.colIndex=indiceColonna-3;
+          return result;          
+
         }
 
         //Controllo combinazione XXnullX
@@ -334,7 +367,9 @@ export class GameServiceService {
           grid[indiceRiga - 1][indiceColonna - 2] != null
         ) {
           console.log('Trio diagonale sensato ');
-          return indiceColonna - 2;
+          result.found=true;
+          result.colIndex=indiceColonna-2;
+          return result;
         }
 
         //Controllo combinazione XnullXX
@@ -346,8 +381,9 @@ export class GameServiceService {
           grid[indiceRiga][indiceColonna - 1] != null
         ) {
           console.log('Trio diagonale sensato ');
-
-          return indiceColonna - 1;
+          result.found=true;
+          result.colIndex=indiceColonna-1;
+          return result;
         }
 
         //Controllo combinazione nullXXX
@@ -361,12 +397,13 @@ export class GameServiceService {
         ) {
           console.log('Trio diagonale sensato ');
 
-          return indiceColonna;
+          result.found=true;
+          result.colIndex=indiceColonna
+          return result;
         }
       }
     }
-
-    return false;
+    return result
   }
 
   findTrioVertical(
@@ -375,6 +412,10 @@ export class GameServiceService {
     grid: string[][],
     player: string
   ) {
+    const result={
+      found:false,
+      colIndex:0
+    }
     //streak verticale
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
@@ -390,12 +431,22 @@ export class GameServiceService {
           grid[indiceRiga - 3][indiceColonna] === null
         ) {
           console.log('Trio verticale sensato ');
-          return indiceColonna;
+          result.found=true;
+          result.colIndex=indiceColonna;  
+          return result;
+       
         }
       }
     }
-    return false;
+    return result
   }
+
+
+
+
+
+
+
 
   //FAI TRIO: ORIZZONTALE \ VERTICALE\ OBLIQUO DESTRO E SINISTRO
   //Cerca una coppia che permetta di fare un trio sensato e restituisce le coordinate della cella da occupare

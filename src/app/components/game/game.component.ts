@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GameServiceService } from '../../services/game-service.service';
-import { flatMap } from 'rxjs';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-game',
@@ -17,7 +17,7 @@ export class GameComponent {
   randomNumber: number[] = [];
   winner: boolean = false;
   columnIndexTarget: number = 0;
-  draw:boolean= false
+  draw: boolean = false;
 
   constructor(private gameService: GameServiceService) {}
 
@@ -44,8 +44,8 @@ export class GameComponent {
   //Genera il tabellone di gioco
   generateBoardGame(size: string) {
     //azzara winner e draw
-    this.winner=false
-    this.draw=false
+    this.winner = false;
+    this.draw = false;
     //estrai un numero per saper chi inizia
     this.gameService.getRandomNumber(this.boardGameSize).subscribe({
       next: (data) => {
@@ -153,7 +153,12 @@ export class GameComponent {
             );
 
             // Prova a piazzare la pedina, se riesce `placePawnRandomly` restituirà `true`
-            placed = this.gameService.placePawn(this.currentPlayer,this.numRow,colIndexRandom,this.grid);
+            placed = this.gameService.placePawn(
+              this.currentPlayer,
+              this.numRow,
+              colIndexRandom,
+              this.grid
+            );
 
             if (!placed) {
               // Se non è riuscito, riprova
@@ -210,79 +215,218 @@ export class GameComponent {
   }
 
   // Vinci o blocca una vincita con priorità a vincere
-  blockOrWin() {
-    const opponentPlayer = this.currentPlayer === 'CPU_1' ? 'CPU_2' : 'CPU_1';
+  // blockOrWin() {
+  //   const opponentPlayer = this.currentPlayer === 'CPU_1' ? 'CPU_2' : 'CPU_1';
+
+  //   // Controlla per vincere
+  //   let target =
+  //     this.gameService.findTrioHorizontal(
+  //       this.numRow,
+  //       this.numCol,
+  //       this.grid,
+  //       this.currentPlayer
+  //     ) ||
+  //     this.gameService.findTrioDiagonal(
+  //       this.numRow,
+  //       this.numCol,
+  //       this.grid,
+  //       this.currentPlayer
+  //     ) ||
+  //     this.gameService.findTrioVertical(
+  //       this.numRow,
+  //       this.numCol,
+  //       this.grid,
+  //       this.currentPlayer
+  //     );
 
 
-    // Controlla per vincere
-    let target = this.gameService.findTrioHorizontal(this.numRow, this.numCol, this.grid, this.currentPlayer) ||
-                 this.gameService.findTrioDiagonal(this.numRow, this.numCol, this.grid, this.currentPlayer) ||
-                 this.gameService.findTrioVertical(this.numRow, this.numCol, this.grid, this.currentPlayer);
+  //   console.log(' target per vincere:', target);
+  //   if (target.found !== false) {
+  //     console.log('Trovata combinazione per vincere');
 
-    if (target !== false) {
-      console.log("Trovata combinazione per vincere")
-      console.log(`Trovato target: ${target}`);
-        this.columnIndexTarget = target;
-        console.log('Indice colonna da riempire per vincere', this.columnIndexTarget);
-       
-        return true; // C'è una mossa vincente
-    }
-    console.log(`Non sono riuscito a vincere. Provo a bloccare ${opponentPlayer}`)
-    // Controlla per bloccare l'avversario
-    target = 
-    this.gameService.findTrioHorizontal(this.numRow, this.numCol, this.grid, opponentPlayer) ||
-             this.gameService.findTrioDiagonal(this.numRow, this.numCol, this.grid, opponentPlayer) ||
-             this.gameService.findTrioVertical(this.numRow, this.numCol, this.grid, opponentPlayer);
-             console.log(`Trovato target: ${target}`);
-    if ( target !== false) {
-      console.log("Trovata combinazione da bloccare")
-      console.log(`Trovato target: ${target}`);
-        this.columnIndexTarget = target;
-        console.log('Indice colonna da riempire per bloccare', this.columnIndexTarget);
-       
-        return true; // C'è una mossa di blocco
-    }
-    console.log("Non sono riuscito a bloccare")
-    return false; // Non c'è né una mossa vincente né una mossa di blocco
+  //     this.columnIndexTarget = target.colIndex;
+  //     console.log(
+  //       'Indice colonna da riempire per vincere',
+  //       this.columnIndexTarget
+  //     );
+
+  //     return true; // C'è una mossa vincente
+  //   }
+  //   console.log(
+  //     `Non sono riuscito a vincere. Provo a bloccare ${opponentPlayer}`
+  //   );
+  //   // Controlla per bloccare l'avversario
+  //   target =
+  //     this.gameService.findTrioHorizontal(
+  //       this.numRow,
+  //       this.numCol,
+  //       this.grid,
+  //       opponentPlayer
+  //     ) ||
+  //     this.gameService.findTrioDiagonal(
+  //       this.numRow,
+  //       this.numCol,
+  //       this.grid,
+  //       opponentPlayer
+  //     ) ||
+  //     this.gameService.findTrioVertical(
+  //       this.numRow,
+  //       this.numCol,
+  //       this.grid,
+  //       opponentPlayer
+  //     );
+
+  //   console.log(' target per bloccare:', target);
+  //   if (target.found !== false) {
+  //     console.log('Trovata combinazione da bloccare');
+
+  //     this.columnIndexTarget = target.colIndex;
+  //     console.log(
+  //       'Indice colonna da riempire per bloccare',
+  //       this.columnIndexTarget
+  //     );
+
+  //     return true; // C'è una mossa di blocco
+  //   }
+  //   console.log('Non sono riuscito a bloccare');
+  //   return false; // Non c'è né una mossa vincente né una mossa di blocco
+  // }
+
+
+blockOrWin(){
+  const opponentPlayer = this.currentPlayer === 'CPU_1' ? 'CPU_2' : 'CPU_1';
+
+  console.log('Provo a vincere')
+
+  //Cerca un trio orizzontale per vincere
+  let target = this.gameService.findTrioHorizontal(
+    this.numRow,
+    this.numCol,
+    this.grid,
+    this.currentPlayer
+  );
+  
+  // Se non è stato trovato un trio orizzontale per vincere, controlla il trio diagonale
+  if (!target.found) {
+    target = this.gameService.findTrioDiagonal(
+      this.numRow,
+      this.numCol,
+      this.grid,
+      this.currentPlayer
+    );
+  }
+  
+  // Se non è stato trovato un trio diagonale per vincere, controlla il trio verticale
+  if (!target.found) {
+    target = this.gameService.findTrioVertical(
+      this.numRow,
+      this.numCol,
+      this.grid,
+      this.currentPlayer
+    );
+  }
+  
+  //Se il target è stato trovato assegna l'indice trovato a columnIndexTarget
+  if (target.found) {
+    console.log('Trovata combinazione per vincere');
+  
+    this.columnIndexTarget = target.colIndex;
+    console.log(
+      'Indice colonna da riempire per vincere',
+      this.columnIndexTarget
+    );
+  
+    return true; 
+  }
+
+  console.log("Non sono riuscito a vincere. Provo a bloccare");
+    
+  // //Cerca un trio orizzontale per vincere
+  target = this.gameService.findTrioHorizontal(
+    this.numRow,
+    this.numCol,
+    this.grid,
+    opponentPlayer
+  );
+  
+  // Se non è stato trovato un trio orizzontale per bloccare, controlla il trio diagonale
+  if (!target.found) {
+    target = this.gameService.findTrioDiagonal(
+      this.numRow,
+      this.numCol,
+      this.grid,
+      opponentPlayer
+    );
+  }
+  
+  // Se non è stato trovato un trio diagonale per bloccare, controlla il trio verticale
+  if (!target.found) {
+    target = this.gameService.findTrioVertical(
+      this.numRow,
+      this.numCol,
+      this.grid,
+      opponentPlayer
+    );
+  }
+  
+  if (target.found) {
+    console.log('Trovata combinazione per bloccare');
+  
+    this.columnIndexTarget = target.colIndex;
+    console.log(
+      'Indice colonna da riempire per vincere',
+      this.columnIndexTarget
+    );
+  
+    return true; // C'è una mossa vincente
+  }
+
+  console.log("Non sono riuscito a bloccare. Inserisco pedina casualmente");
+
+
+
+  
+  return false; // Nessuna mossa vincente trovata
+  
 }
 
 
   async play() {
     console.log('*********************');
-    console.log(`E' il turno di ${this.currentPlayer}`)
-    console.log(" Grid a inizio mossa", this.grid)
+    console.log(`E' il turno di ${this.currentPlayer}`);
+    console.log(' Grid a inizio mossa', this.grid);
     // Vinci o blocca se possibile
     // se trova una combinazione vincente o da bloccare inserisci la pedina nella colonna trovata e mettila in basso garantendo la gravità del gioco
     if (this.blockOrWin()) {
-      console.log("Block or win trovato, posiziona in maniera sensata")
-      this.gameService.placePawn(this.currentPlayer,this.numRow,this.columnIndexTarget,this.grid);
-      console.log(" Grid aggiornata", this.grid)
-      
-    }else{
-      console.log("Nessun block or win quindi posiziona casualmente")
-      await this.tryPlaceRandomPawn() //pedina casuale
+      console.log('Block or win trovato, posiziona in maniera sensata');
+      this.gameService.placePawn(
+        this.currentPlayer,
+        this.numRow,
+        this.columnIndexTarget,
+        this.grid
+      );
+      console.log(' Grid aggiornata', this.grid);
+    } else {
+      console.log('Nessun block or win quindi posiziona casualmente');
+      await this.tryPlaceRandomPawn(); //pedina casuale
     }
-    
+
     //verifica vittoria
     this.verifyVictory();
     if (this.winner) {
-         console.log(`${this.currentPlayer} ha vinto!`);
-         return;
+      console.log(`${this.currentPlayer} ha vinto!`);
+      return;
     }
 
     //verifica pareggio
     if (this.gameService.draw(this.grid)) {
-      console.log('Pareggio!')
-      this.draw=true
-      return
+      console.log('Pareggio!');
+      this.draw = true;
+      return;
     }
     //cambio giocatore
     this.changePlayer(this.currentPlayer);
-    
 
-    console.log("Grid a fine mossa", this.grid)
-     
-    }
-    
+    console.log('Grid a fine mossa', this.grid);
   }
-
+}
