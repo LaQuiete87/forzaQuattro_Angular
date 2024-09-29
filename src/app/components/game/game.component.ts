@@ -41,7 +41,7 @@ export class GameComponent {
     }
   }
 
-  //Genera il tabellone di gioco
+  //Genera il tabellone di gioco in base alla dimensione scelta
   generateBoardGame(size: string) {
     //azzara winner e draw
     this.winner = false;
@@ -98,7 +98,7 @@ export class GameComponent {
   // Metodo per provare a inserire la pedina in una colonna casuale
   async tryPlaceRandomPawn() {
     let placed = false;
-
+    console.log('Inserisco la pedina casualmente');
     // Finché la pedina non viene piazzata correttamente
     const tryToPlace = () => {
       // Estrai un numero casuale per la colonna
@@ -140,6 +140,7 @@ export class GameComponent {
     await tryToPlace();
   }
 
+  //Verifica la vittoria
   verifyVictory(): boolean {
     const won =
       this.gameService.forza4Horizontal(
@@ -174,6 +175,7 @@ export class GameComponent {
     return false;
   }
 
+  //Cerca la mossa per vincere o bloccare la vincita
   blockOrWin() {
     const opponentPlayer = this.currentPlayer === 'CPU_1' ? 'CPU_2' : 'CPU_1';
 
@@ -220,9 +222,10 @@ export class GameComponent {
       return true;
     }
 
-    console.log('Non sono riuscito a vincere. Provo a bloccare');
+    console.log('Non sono riuscito a vincere.');
+    console.log('Provo a bloccare');
 
-    // //Cerca un trio orizzontale per vincere
+    // //Cerca un trio orizzontale per bloccare
     target = this.gameService.findTrioHorizontal(
       this.numRow,
       this.numCol,
@@ -255,7 +258,7 @@ export class GameComponent {
 
       this.columnIndexTarget = target.colIndex;
       console.log(
-        'Indice colonna da riempire per vincere',
+        'Indice colonna da riempire per bloccare',
         this.columnIndexTarget
       );
 
@@ -266,19 +269,27 @@ export class GameComponent {
 
     return false; // Nessuna mossa vincente trovata
   }
-
-  
-
+// Cerca di fare un tris sensato
   tryToMakeTrio() {
-    console.log('Provo a fare un tris');
+    console.log('Provo a fare un tris sensato');
 
-    //Cerca un duo orizzontale per fare tris
-    let target = this.gameService.findCoupleHorizontal(
+    //Cerca un duo verticale per fare tris sensato
+    let target = this.gameService.findCoupleVertical(
       this.numRow,
       this.numCol,
       this.grid,
       this.currentPlayer
     );
+
+    // Se non è stato trovato un duo verticale, controlla il duo orizzontale
+    if (!target.found) {
+      target = this.gameService.findCoupleHorizontal(
+        this.numRow,
+        this.numCol,
+        this.grid,
+        this.currentPlayer
+      );
+    }
 
     // Se non è stato trovato un duo orizzontale, controlla il duo diagonale
     if (!target.found) {
@@ -290,9 +301,47 @@ export class GameComponent {
       );
     }
 
-    // Se non è stato trovato un duo diagonale, controlla il duo verticale
+    //Se il target è stato trovato assegna l'indice trovato a columnIndexTarget
+    if (target.found) {
+      console.log('Trovata combinazione per fare tris sensato');
+
+      this.columnIndexTarget = target.colIndex;
+      console.log(
+        'Indice colonna da riempire per fare tris',
+        this.columnIndexTarget
+      );
+
+      return true;
+    }
+
+    console.log('Non sono riuscito a fare tris sensato.');
+    return false;
+  }
+  //Cerca di fare un duo sensato
+  tryToMakeCouple() {
+    console.log('Provo a fare un duo sensato');
+
+    //Cerca un singolo verticale per fare un duo sensato
+    let target = this.gameService.findSingleVertical(
+      this.numRow,
+      this.numCol,
+      this.grid,
+      this.currentPlayer
+    );
+
+    // Se non è stato trovato un singolo verticale, controlla il singolo orizzontale
     if (!target.found) {
-      target = this.gameService.findCoupleVertical(
+      target = this.gameService.findSingleHorizontal(
+        this.numRow,
+        this.numCol,
+        this.grid,
+        this.currentPlayer
+      );
+    }
+
+    // Se non è stato trovato un singolo orizzontale, controlla il singolo diagonale
+    if (!target.found) {
+      target = this.gameService.findSingleDiagonal(
         this.numRow,
         this.numCol,
         this.grid,
@@ -302,21 +351,22 @@ export class GameComponent {
 
     //Se il target è stato trovato assegna l'indice trovato a columnIndexTarget
     if (target.found) {
-      console.log('Trovata combinazione per fare tris');
+      console.log('Trovata combinazione per fare duo sensato');
 
       this.columnIndexTarget = target.colIndex;
       console.log(
-        'Indice colonna da riempire per fare tri',
+        'Indice colonna da riempire per fare duo',
         this.columnIndexTarget
       );
 
       return true;
     }
 
-    console.log('Non sono riuscito a fare tris.');
+    console.log('Non sono riuscito a fare duo sensato.');
     return false;
   }
 
+  //Dà inizio al gioco
   async play() {
     console.log('*********************');
     console.log(`E' il turno di ${this.currentPlayer}`);
@@ -334,9 +384,19 @@ export class GameComponent {
       //verifica se c'è stata una vincita/blocco o pareggio altrimenti cambia il giocatore
       if (await this.endOrChangePlayer()) return;
     }
-    //se non è stata trovata una combinazione vincente o da bloccare, controlla se è possibile fare un tris
+    //se non è stata trovata una combinazione vincente o da bloccare controlla se è possibile fare un tris sensato
     else if (this.tryToMakeTrio()) {
       console.log('Trovata combinazione per fare tris');
+      this.gameService.placePawn(
+        this.currentPlayer,
+        this.numRow,
+        this.columnIndexTarget,
+        this.grid
+      );
+      if (await this.endOrChangePlayer()) return;
+      //se non è stata trovata una combinazione per fare un tris sensato controlla se è possibile fare un duo sensato
+    } else if (this.tryToMakeCouple()) {
+      console.log('Trovata combinazione per fare duo');
       this.gameService.placePawn(
         this.currentPlayer,
         this.numRow,
@@ -380,6 +440,7 @@ export class GameComponent {
     // }
   }
 
+  //Controlla se la partita è finita o pareggiata. In caso contrario cambia giocatore
   async endOrChangePlayer() {
     // verifica vittoria
     this.verifyVictory();
