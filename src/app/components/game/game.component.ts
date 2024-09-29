@@ -165,12 +165,10 @@ export class GameComponent {
     if (won) {
       this.winner = true;
       console.log('*****Hai vinto');
-      console.log('winner', this.winner);
       return true;
     } else {
       this.winner = false;
       console.log('Non hai ancora vinto');
-      console.log('winner', this.winner);
     }
     return false;
   }
@@ -412,32 +410,6 @@ export class GameComponent {
       if (await this.endOrChangePlayer()) return;
     }
 
-    // // se non è stata trovata una combinazione vincente o da bloccare, controlla se è possibile fare un tris
-
-    // //se trova una combinazione per fare un tris sensato, mette la pedina
-    // if (this.tryToMakeTrio()) {
-    //   this.gameService.placePawn(
-    //     this.currentPlayer,
-    //     this.numRow,
-    //     this.columnIndexTarget,
-    //     this.grid
-    //   );
-    //     if(await this.endOrChangePlayer()) return
-
-    // } else if(){
-    //   //pedina casuale
-    //   await this.tryPlaceRandomPawn();
-    //   //verifica pareggio
-    //   if (this.gameService.draw(this.grid)) {
-    //     console.log('Pareggio!');
-    //     this.draw = true;
-    //     return;
-    //   }
-
-    //   //cambio giocatore
-    //   this.changePlayer(this.currentPlayer);
-    //   return;
-    // }
   }
 
   //Controlla se la partita è finita o pareggiata. In caso contrario cambia giocatore
@@ -461,42 +433,5 @@ export class GameComponent {
     return false; // continua il gioco
   }
 
-  // async play() {
-  //   console.log('*********************');
-  //   console.log(`E' il turno di ${this.currentPlayer}`);
-  //   console.log(' Grid a inizio mossa', this.grid);
-  //   // Vinci o blocca se possibile
-  //   // se trova una combinazione vincente o da bloccare inserisci la pedina nella colonna trovata e mettila in basso garantendo la gravità del gioco
-  //   if (this.blockOrWin()) {
-  //     console.log('Block or win trovato, posiziona in maniera sensata');
-  //     this.gameService.placePawn(
-  //       this.currentPlayer,
-  //       this.numRow,
-  //       this.columnIndexTarget,
-  //       this.grid
-  //     );
-  //     console.log(' Grid aggiornata', this.grid);
-  //   } else {
-  //     console.log('Nessun block or win quindi posiziona casualmente');
-  //     await this.tryPlaceRandomPawn(); //pedina casuale
-  //   }
 
-  //   //verifica vittoria
-  //   this.verifyVictory();
-  //   if (this.winner) {
-  //     console.log(`${this.currentPlayer} ha vinto!`);
-  //     return;
-  //   }
-
-  //   //verifica pareggio
-  //   if (this.gameService.draw(this.grid)) {
-  //     console.log('Pareggio!');
-  //     this.draw = true;
-  //     return;
-  //   }
-  //   //cambio giocatore
-  //   this.changePlayer(this.currentPlayer);
-
-  //   console.log('Grid a fine mossa', this.grid);
-  // }
 }
