@@ -21,8 +21,6 @@ export class GameComponent {
 
   constructor(private gameService: GameServiceService) {}
 
-  ngOnInit() {}
-
   //Cambio giocatore
   changePlayer(currentPlayer: string) {
     if (currentPlayer === 'CPU_1') {
@@ -86,12 +84,10 @@ export class GameComponent {
   }
 
   playerColor(currentPlayer: string) {
-    if (currentPlayer === 'CPU_1') {
-      return { 'background-color': 'yellow' };
-    }
-    if (currentPlayer === 'CPU_2') {
-      return { 'background-color': 'red' };
-    }
+    if (currentPlayer === 'CPU_1')return { 'background-color': 'yellow' };
+    
+    if (currentPlayer === 'CPU_2')return { 'background-color': 'red' };
+    
     return;
   }
 
@@ -113,12 +109,7 @@ export class GameComponent {
             );
 
             // Prova a piazzare la pedina, se riesce `placePawnRandomly` restituirà `true`
-            placed = this.gameService.placePawn(
-              this.currentPlayer,
-              this.numRow,
-              colIndexRandom,
-              this.grid
-            );
+            placed = this.gameService.placePawn(this.currentPlayer,this.numRow,colIndexRandom,this.grid);
 
             if (!placed) {
               // Se non è riuscito, riprova
@@ -143,24 +134,9 @@ export class GameComponent {
   //Verifica la vittoria
   verifyVictory(): boolean {
     const won =
-      this.gameService.forza4Horizontal(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      ) ||
-      this.gameService.forza4Diagonal(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      ) ||
-      this.gameService.forza4Vertical(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      );
+      this.gameService.forza4Horizontal(this.numRow,this.numCol,this.grid,this.currentPlayer) ||
+      this.gameService.forza4Diagonal(this.numRow,this.numCol,this.grid,this.currentPlayer) ||
+      this.gameService.forza4Vertical(this.numRow,this.numCol,this.grid,this.currentPlayer);
 
     if (won) {
       this.winner = true;
@@ -176,47 +152,23 @@ export class GameComponent {
   //Cerca la mossa per vincere o bloccare la vincita
   blockOrWin() {
     const opponentPlayer = this.currentPlayer === 'CPU_1' ? 'CPU_2' : 'CPU_1';
-
     console.log('Provo a vincere');
-
     //Cerca un trio orizzontale per vincere
-    let target = this.gameService.findTrioHorizontal3(
-      this.numRow,
-      this.numCol,
-      this.grid,
-      this.currentPlayer
-    );
-
+    let target = this.gameService.findTrioHorizontal(this.numRow,this.numCol,this.grid,this.currentPlayer);
+    
     // Se non è stato trovato un trio orizzontale per vincere, controlla il trio diagonale
-    if (!target.found) {
-      target = this.gameService.findTrioDiagonal3(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      );
-    }
+    if (!target.found)target = this.gameService.findTrioDiagonal(this.numRow,this.numCol,this.grid,this.currentPlayer);
+   
 
     // Se non è stato trovato un trio diagonale per vincere, controlla il trio verticale
-    if (!target.found) {
-      target = this.gameService.findTrioVertical3(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      );
-    }
+    if (!target.found) target = this.gameService.findTrioVertical(this.numRow,this.numCol,this.grid,this.currentPlayer);
+    
 
     //Se il target è stato trovato assegna l'indice trovato a columnIndexTarget
     if (target.found) {
       console.log('Trovata combinazione per vincere');
-
       this.columnIndexTarget = target.colIndex;
-      console.log(
-        'Indice colonna da riempire per vincere',
-        this.columnIndexTarget
-      );
-
+      console.log('Indice colonna da riempire per vincere',this.columnIndexTarget);
       return true;
     }
 
@@ -224,47 +176,23 @@ export class GameComponent {
     console.log('Provo a bloccare');
 
     // //Cerca un trio orizzontale per bloccare
-    target = this.gameService.findTrioHorizontal(
-      this.numRow,
-      this.numCol,
-      this.grid,
-      opponentPlayer
-    );
+    target = this.gameService.findTrioHorizontal(this.numRow,this.numCol,this.grid,opponentPlayer);
 
     // Se non è stato trovato un trio orizzontale per bloccare, controlla il trio diagonale
-    if (!target.found) {
-      target = this.gameService.findTrioDiagonal(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        opponentPlayer
-      );
-    }
+    if (!target.found) target = this.gameService.findTrioDiagonal(this.numRow,this.numCol,this.grid,opponentPlayer);
+    
 
     // Se non è stato trovato un trio diagonale per bloccare, controlla il trio verticale
-    if (!target.found) {
-      target = this.gameService.findTrioVertical(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        opponentPlayer
-      );
-    }
+    if (!target.found)target = this.gameService.findTrioVertical(this.numRow,this.numCol,this.grid,opponentPlayer);
+    
 
     if (target.found) {
       console.log('Trovata combinazione per bloccare');
-
       this.columnIndexTarget = target.colIndex;
-      console.log(
-        'Indice colonna da riempire per bloccare',
-        this.columnIndexTarget
-      );
-
+      console.log('Indice colonna da riempire per bloccare',this.columnIndexTarget);
       return true; // C'è una mossa vincente
     }
-
     console.log('Non sono riuscito a bloccare.');
-
     return false; // Nessuna mossa vincente trovata
   }
 // Cerca di fare un tris sensato
@@ -272,43 +200,21 @@ export class GameComponent {
     console.log('Provo a fare un tris sensato');
 
     //Cerca un duo verticale per fare tris sensato
-    let target = this.gameService.findCoupleVertical3(
-      this.numRow,
-      this.numCol,
-      this.grid,
-      this.currentPlayer
-    );
+    let target = this.gameService.findCoupleVertical(this.numRow,this.numCol,this.grid,this.currentPlayer);
 
     // Se non è stato trovato un duo verticale, controlla il duo orizzontale
-    if (!target.found) {
-      target = this.gameService.findCoupleHorizontal3(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      );
-    }
+    if (!target.found)target = this.gameService.findCoupleHorizontal(this.numRow,this.numCol,this.grid,this.currentPlayer);
+    
 
     // Se non è stato trovato un duo orizzontale, controlla il duo diagonale
-    if (!target.found) {
-      target = this.gameService.findCoupleDiagonal3(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      );
-    }
+    if (!target.found)target = this.gameService.findCoupleDiagonal(this.numRow,this.numCol,this.grid,this.currentPlayer);
+    
 
     //Se il target è stato trovato assegna l'indice trovato a columnIndexTarget
     if (target.found) {
       console.log('Trovata combinazione per fare tris sensato');
-
       this.columnIndexTarget = target.colIndex;
-      console.log(
-        'Indice colonna da riempire per fare tris',
-        this.columnIndexTarget
-      );
-
+      console.log('Indice colonna da riempire per fare tris',this.columnIndexTarget);
       return true;
     }
 
@@ -320,43 +226,20 @@ export class GameComponent {
     console.log('Provo a fare un duo sensato');
 
     //Cerca un singolo verticale per fare un duo sensato
-    let target = this.gameService.findSingleVertical3(
-      this.numRow,
-      this.numCol,
-      this.grid,
-      this.currentPlayer
-    );
+    let target = this.gameService.findSingleVertical(this.numRow,this.numCol,this.grid,this.currentPlayer);
 
     // Se non è stato trovato un singolo verticale, controlla il singolo orizzontale
-    if (!target.found) {
-      target = this.gameService.findSingleHorizontal3(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      );
-    }
-
+    if (!target.found)target = this.gameService.findSingleHorizontal(this.numRow,this.numCol,this.grid,this.currentPlayer);
+    
     // Se non è stato trovato un singolo orizzontale, controlla il singolo diagonale
-    if (!target.found) {
-      target = this.gameService.findSingleDiagonal3(
-        this.numRow,
-        this.numCol,
-        this.grid,
-        this.currentPlayer
-      );
-    }
+    if (!target.found)target = this.gameService.findSingleDiagonal(this.numRow,this.numCol,this.grid,this.currentPlayer);
+    
 
     //Se il target è stato trovato assegna l'indice trovato a columnIndexTarget
     if (target.found) {
       console.log('Trovata combinazione per fare duo sensato');
-
       this.columnIndexTarget = target.colIndex;
-      console.log(
-        'Indice colonna da riempire per fare duo',
-        this.columnIndexTarget
-      );
-
+      console.log('Indice colonna da riempire per fare duo',this.columnIndexTarget);
       return true;
     }
 
@@ -373,34 +256,19 @@ export class GameComponent {
     // se trova una combinazione vincente o da bloccare inserisci la pedina nella colonna trovata e mettila in basso garantendo la gravità del gioco
     if (this.blockOrWin()) {
       console.log('Block or Win trovato, posiziona per vincere o bloccare');
-      this.gameService.placePawn(
-        this.currentPlayer,
-        this.numRow,
-        this.columnIndexTarget,
-        this.grid
-      );
+      this.gameService.placePawn(this.currentPlayer,this.numRow,this.columnIndexTarget,this.grid);
       //verifica se c'è stata una vincita/blocco o pareggio altrimenti cambia il giocatore
       if (await this.endOrChangePlayer()) return;
     }
     //se non è stata trovata una combinazione vincente o da bloccare controlla se è possibile fare un tris sensato
     else if (this.tryToMakeTrio()) {
       console.log('Trovata combinazione per fare tris');
-      this.gameService.placePawn(
-        this.currentPlayer,
-        this.numRow,
-        this.columnIndexTarget,
-        this.grid
-      );
+      this.gameService.placePawn(this.currentPlayer,this.numRow,this.columnIndexTarget,this.grid);
       if (await this.endOrChangePlayer()) return;
       //se non è stata trovata una combinazione per fare un tris sensato controlla se è possibile fare un duo sensato
     } else if (this.tryToMakeCouple()) {
       console.log('Trovata combinazione per fare duo');
-      this.gameService.placePawn(
-        this.currentPlayer,
-        this.numRow,
-        this.columnIndexTarget,
-        this.grid
-      );
+      this.gameService.placePawn(this.currentPlayer,this.numRow,this.columnIndexTarget,this.grid);
       if (await this.endOrChangePlayer()) return;
     }
     //se non è stata trovata una combinazione per fare tris, inserisci la pedina casualmente
