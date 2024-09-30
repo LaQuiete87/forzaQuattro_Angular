@@ -1769,68 +1769,50 @@ export class GameServiceService {
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
-        //Orizzontale
-        const result = {
-          found: false,
-          colIndex: 0,
+        let control = {
+          player: 0,
+          null: 0,
+          index: -1,
+          indexValid: false,
+          combination: [] as string[],
         };
-        for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-          for (
-            let indiceColonna = 0;
-            indiceColonna <= numCol - 4;
-            indiceColonna++
-          ) {
-            let control = {
-              player: 0,
-              null: 0,
-              index: -1,
-              indexValid: false,
-              combination: [] as string[],
-            };
-            //scansiona a 4 a 4
-            for (let i = 0; i < 4; i++) {
-              //se nella cella c'è player incrementa player
-              if (grid[indiceRiga][indiceColonna + i] === player) {
-                control.player++;
-                control.combination.push('x');
-              }
-              //se nella cella c'è null incrementa null
-              else if (grid[indiceRiga][indiceColonna + i] === null) {
-                control.null++;
-                control.combination.push('-');
-                //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
-                if (
-                  indiceRiga === numRow - 1 ||
-                  grid[indiceRiga][indiceColonna + i] !== null
-                ) {
-                  control.indexValid = true;
-                  control.index = indiceColonna + i;
-                }
-              }
-            }
-            //se control.player = 3, control.null = 1 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        //scansiona a 4 a 4
+        for (let i = 0; i < 4; i++) {
+          //se nella cella c'è player incrementa player
+          if (grid[indiceRiga][indiceColonna + i] === player) {
+            control.player++;
+            control.combination.push('x');
+          }
+          //se nella cella c'è null incrementa null
+          else if (grid[indiceRiga][indiceColonna + i] === null) {
+            control.null++;
+            control.combination.push('-');
+            //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
             if (
-              control.player === 3 &&
-              control.null === 1 &&
-              control.indexValid
+              indiceRiga === numRow - 1 ||
+              grid[indiceRiga][indiceColonna + i] !== null
             ) {
-              console.log('Forza4 orizzontale sensato possibile');
-              console.log(
-                'Combinazione trio sensato intercettata:',
-                control.combination
-              );
-              result.found = true;
-              result.colIndex = control.index;
-              return result;
+              control.indexValid = true;
+              control.index = indiceColonna + i;
             }
           }
+        }
+        //se control.player = 3, control.null = 1 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        if (control.player === 3 && control.null === 1 && control.indexValid) {
+          console.log('Forza4 orizzontale sensato possibile');
+          console.log(
+            'Combinazione tris sensata intercettata:',
+            control.combination
+          );
+          result.found = true;
+          result.colIndex = control.index;
+          return result;
         }
       }
     }
     return result;
   }
-
-  findDuoHorizontal(
+  findCoupleHorizontal3(
     numRow: number,
     numCol: number,
     grid: string[][],
@@ -1846,61 +1828,44 @@ export class GameServiceService {
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
-        //Orizzontale
-        const result = {
-          found: false,
-          colIndex: 0,
+        let control = {
+          player: 0,
+          null: 0,
+          index: -1,
+          indexValid: false,
+          combination: [] as string[],
         };
-        for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-          for (
-            let indiceColonna = 0;
-            indiceColonna <= numCol - 4;
-            indiceColonna++
-          ) {
-            let control = {
-              player: 0,
-              null: 0,
-              index: -1,
-              indexValid: false,
-              combination: [] as string[],
-            };
-            //scansiona a 4 a 4
-            for (let i = 0; i < 4; i++) {
-              //se nella cella c'è player incrementa player
-              if (grid[indiceRiga][indiceColonna + i] === player) {
-                control.player++;
-                control.combination.push('x');
-              }
-              //se nella cella c'è null incrementa null
-              else if (grid[indiceRiga][indiceColonna + i] === null) {
-                control.null++;
-                control.combination.push('-');
-                //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
-                if (
-                  indiceRiga === numRow - 1 ||
-                  grid[indiceRiga][indiceColonna + i] !== null
-                ) {
-                  control.indexValid = true;
-                  control.index = indiceColonna + i;
-                }
-              }
-            }
-            //se control.player = 2, control.null = 2 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        //scansiona a 4 a 4
+        for (let i = 0; i < 4; i++) {
+          //se nella cella c'è player incrementa player
+          if (grid[indiceRiga][indiceColonna + i] === player) {
+            control.player++;
+            control.combination.push('x');
+          }
+          //se nella cella c'è null incrementa null
+          else if (grid[indiceRiga][indiceColonna + i] === null) {
+            control.null++;
+            control.combination.push('-');
+            //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
             if (
-              control.player === 2 &&
-              control.null === 2 &&
-              control.indexValid
+              indiceRiga === numRow - 1 ||
+              grid[indiceRiga][indiceColonna + i] !== null
             ) {
-              console.log('Trio orizzontale sensato possibile');
-              console.log(
-                'Combinazione duo sensato intercettata:',
-                control.combination
-              );
-              result.found = true;
-              result.colIndex = control.index;
-              return result;
+              control.indexValid = true;
+              control.index = indiceColonna + i;
             }
           }
+        }
+        //se control.player = 2, control.null = 2 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        if (control.player === 2 && control.null === 2 && control.indexValid) {
+          console.log('Tris orizzontale sensato possibile');
+          console.log(
+            'Combinazione duo sensato intercettata:',
+            control.combination
+          );
+          result.found = true;
+          result.colIndex = control.index;
+          return result;
         }
       }
     }
@@ -1923,61 +1888,44 @@ export class GameServiceService {
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
-        //Orizzontale
-        const result = {
-          found: false,
-          colIndex: 0,
+        let control = {
+          player: 0,
+          null: 0,
+          index: -1,
+          indexValid: false,
+          combination: [] as string[],
         };
-        for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-          for (
-            let indiceColonna = 0;
-            indiceColonna <= numCol - 4;
-            indiceColonna++
-          ) {
-            let control = {
-              player: 0,
-              null: 0,
-              index: -1,
-              indexValid: false,
-              combination: [] as string[],
-            };
-            //scansiona a 4 a 4
-            for (let i = 0; i < 4; i++) {
-              //se nella cella c'è player incrementa player
-              if (grid[indiceRiga][indiceColonna + i] === player) {
-                control.player++;
-                control.combination.push('x');
-              }
-              //se nella cella c'è null incrementa null
-              else if (grid[indiceRiga][indiceColonna + i] === null) {
-                control.null++;
-                control.combination.push('-');
-                //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
-                if (
-                  indiceRiga === numRow - 1 ||
-                  grid[indiceRiga][indiceColonna + i] !== null
-                ) {
-                  control.indexValid = true;
-                  control.index = indiceColonna + i;
-                }
-              }
-            }
-            //se control.player = 1, control.null = 3 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        //scansiona a 4 a 4
+        for (let i = 0; i < 4; i++) {
+          //se nella cella c'è player incrementa player
+          if (grid[indiceRiga][indiceColonna + i] === player) {
+            control.player++;
+            control.combination.push('x');
+          }
+          //se nella cella c'è null incrementa null
+          else if (grid[indiceRiga][indiceColonna + i] === null) {
+            control.null++;
+            control.combination.push('-');
+            //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
             if (
-              control.player === 1 &&
-              control.null === 3 &&
-              control.indexValid
+              indiceRiga === numRow - 1 ||
+              grid[indiceRiga][indiceColonna + i] !== null
             ) {
-              console.log('Duo orizzontale sensato possibile');
-              console.log(
-                'Combinazione singola sensata intercettata:',
-                control.combination
-              );
-              result.found = true;
-              result.colIndex = control.index;
-              return result;
+              control.indexValid = true;
+              control.index = indiceColonna + i;
             }
           }
+        }
+        //se control.player = 1, control.null = 3 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        if (control.player === 1 && control.null === 3 && control.indexValid) {
+          console.log('Duo orizzontale sensato possibile');
+          console.log(
+            'Combinazione singola sensata intercettata:',
+            control.combination
+          );
+          result.found = true;
+          result.colIndex = control.index;
+          return result;
         }
       }
     }

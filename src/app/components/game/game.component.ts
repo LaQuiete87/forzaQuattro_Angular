@@ -180,7 +180,7 @@ export class GameComponent {
     console.log('Provo a vincere');
 
     //Cerca un trio orizzontale per vincere
-    let target = this.gameService.findTrioHorizontal(
+    let target = this.gameService.findTrioHorizontal3(
       this.numRow,
       this.numCol,
       this.grid,
@@ -189,7 +189,7 @@ export class GameComponent {
 
     // Se non è stato trovato un trio orizzontale per vincere, controlla il trio diagonale
     if (!target.found) {
-      target = this.gameService.findTrioDiagonal(
+      target = this.gameService.findTrioDiagonal3(
         this.numRow,
         this.numCol,
         this.grid,
@@ -199,7 +199,7 @@ export class GameComponent {
 
     // Se non è stato trovato un trio diagonale per vincere, controlla il trio verticale
     if (!target.found) {
-      target = this.gameService.findTrioVertical(
+      target = this.gameService.findTrioVertical3(
         this.numRow,
         this.numCol,
         this.grid,
@@ -272,7 +272,7 @@ export class GameComponent {
     console.log('Provo a fare un tris sensato');
 
     //Cerca un duo verticale per fare tris sensato
-    let target = this.gameService.findCoupleVertical(
+    let target = this.gameService.findCoupleVertical3(
       this.numRow,
       this.numCol,
       this.grid,
@@ -281,7 +281,7 @@ export class GameComponent {
 
     // Se non è stato trovato un duo verticale, controlla il duo orizzontale
     if (!target.found) {
-      target = this.gameService.findCoupleHorizontal(
+      target = this.gameService.findCoupleHorizontal3(
         this.numRow,
         this.numCol,
         this.grid,
@@ -291,7 +291,7 @@ export class GameComponent {
 
     // Se non è stato trovato un duo orizzontale, controlla il duo diagonale
     if (!target.found) {
-      target = this.gameService.findCoupleDiagonal(
+      target = this.gameService.findCoupleDiagonal3(
         this.numRow,
         this.numCol,
         this.grid,
@@ -320,7 +320,7 @@ export class GameComponent {
     console.log('Provo a fare un duo sensato');
 
     //Cerca un singolo verticale per fare un duo sensato
-    let target = this.gameService.findSingleVertical(
+    let target = this.gameService.findSingleVertical3(
       this.numRow,
       this.numCol,
       this.grid,
@@ -329,7 +329,7 @@ export class GameComponent {
 
     // Se non è stato trovato un singolo verticale, controlla il singolo orizzontale
     if (!target.found) {
-      target = this.gameService.findSingleHorizontal(
+      target = this.gameService.findSingleHorizontal3(
         this.numRow,
         this.numCol,
         this.grid,
@@ -339,7 +339,7 @@ export class GameComponent {
 
     // Se non è stato trovato un singolo orizzontale, controlla il singolo diagonale
     if (!target.found) {
-      target = this.gameService.findSingleDiagonal(
+      target = this.gameService.findSingleDiagonal3(
         this.numRow,
         this.numCol,
         this.grid,
