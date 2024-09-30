@@ -1418,7 +1418,119 @@ export class GameServiceService {
     return result;
   }
 
-  // *****
+  // *****VERSIONI COMPRESE*****
+
+  //Diagonali
+
+  findTrioDiagonal3(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    player: string
+  ) {
+    //diagonale destro
+    const result = {
+      found: false,
+      colIndex: 0,
+    };
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 4;
+        indiceColonna++
+      ) {
+        let control = {
+          player: 0,
+          null: 0,
+          index: -1,
+          indexValid: false,
+          combination: [] as string[],
+        };
+        //scansiona a 4 a 4
+        for (let i = 0; i < 4; i++) {
+          //se nella cella c'è player incrementa player
+          if (grid[indiceRiga - i][indiceColonna + i] === player) {
+            control.player++;
+            control.combination.push('x');
+          }
+          //se nella cella c'è null incrementa null
+          else if (grid[indiceRiga - i][indiceColonna + i] === null) {
+            control.null++;
+            control.combination.push('-');
+            //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
+            if (
+              indiceRiga - i === numRow - 1 ||
+              grid[indiceRiga - i + 1][indiceColonna + i] !== null
+            ) {
+              control.indexValid = true;
+              control.index = indiceColonna + i;
+            }
+          }
+        }
+        //se control.player = 3, control.null = 1 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        if (control.player === 3 && control.null === 1 && control.indexValid) {
+          console.log('Forza4 diagonale destro sensato possibile');
+          console.log(
+            'Combinazione trio sensato intercettata:',
+            control.combination
+          );
+          result.found = true;
+          result.colIndex = control.index;
+          return result;
+        }
+      }
+    }
+    //diagonale sinistro
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = numCol - 1;
+        indiceColonna >= 3;
+        indiceColonna--
+      ) {
+        let control = {
+          player: 0,
+          null: 0,
+          index: -1,
+          indexValid: false,
+          combination: [] as string[],
+        };
+        //scansiona a 4 a 4
+        for (let i = 0; i < 4; i++) {
+          //se nella cella c'è player incrementa player
+          if (grid[indiceRiga - i][indiceColonna - i] === player) {
+            control.player++;
+            control.combination.push('x');
+          }
+          //se nella cella c'è null incrementa null
+          else if (grid[indiceRiga - i][indiceColonna - i] === null) {
+            control.null++;
+            control.combination.push('-');
+            //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
+            if (
+              indiceRiga - i === numRow - 1 ||
+              grid[indiceRiga - i + 1][indiceColonna - i] !== null
+            ) {
+              control.indexValid = true;
+              control.index = indiceColonna - i;
+            }
+          }
+        }
+        //se control.player = 3, control.null = 1 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        if (control.player === 3 && control.null === 1 && control.indexValid) {
+          console.log('Forza4 diagonale sinistro sensato possibile');
+          console.log(
+            'Combinazione trio sensato intercettata:',
+            control.combination
+          );
+          result.found = true;
+          result.colIndex = control.index;
+          return result;
+        }
+      }
+    }
+
+    return result;
+  }
 
   findCoupleDiagonal3(
     numRow: number,
@@ -1442,20 +1554,23 @@ export class GameServiceService {
           null: 0,
           index: -1,
           indexValid: false,
+          combination: [] as string[],
         };
         //scansiona a 4 a 4
         for (let i = 0; i < 4; i++) {
           //se nella cella c'è player incrementa player
-          if (grid[indiceRiga - 1][indiceColonna + i] === player) {
+          if (grid[indiceRiga - i][indiceColonna + i] === player) {
             control.player++;
+            control.combination.push('x');
           }
           //se nella cella c'è null incrementa null
-          else if (grid[indiceRiga][indiceColonna + i] === null) {
+          else if (grid[indiceRiga - i][indiceColonna + i] === null) {
             control.null++;
+            control.combination.push('-');
             //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
             if (
-              indiceRiga === numRow - 1 ||
-              grid[indiceRiga + 1][indiceColonna + i] !== null
+              indiceRiga - i === numRow - 1 ||
+              grid[indiceRiga - i + 1][indiceColonna + i] !== null
             ) {
               control.indexValid = true;
               control.index = indiceColonna + i;
@@ -1464,288 +1579,500 @@ export class GameServiceService {
         }
         //se control.player = 2, control.null = 2 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
         if (control.player === 2 && control.null === 2 && control.indexValid) {
-          console.log('Trio orizzontale sensato possibile');
+          console.log('Trio diagonale destro sensato possibile');
+          console.log(
+            'Combinazione duo sensato intercettata:',
+            control.combination
+          );
           result.found = true;
           result.colIndex = control.index;
           return result;
         }
       }
     }
+    //diagonale sinistro
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = numCol - 1;
+        indiceColonna >= 3;
+        indiceColonna--
+      ) {
+        let control = {
+          player: 0,
+          null: 0,
+          index: -1,
+          indexValid: false,
+          combination: [] as string[],
+        };
+        //scansiona a 4 a 4
+        for (let i = 0; i < 4; i++) {
+          //se nella cella c'è player incrementa player
+          if (grid[indiceRiga - i][indiceColonna - i] === player) {
+            control.player++;
+            control.combination.push('x');
+          }
+          //se nella cella c'è null incrementa null
+          else if (grid[indiceRiga - i][indiceColonna - i] === null) {
+            control.null++;
+            control.combination.push('-');
+            //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
+            if (
+              indiceRiga - i === numRow - 1 ||
+              grid[indiceRiga - i + 1][indiceColonna - i] !== null
+            ) {
+              control.indexValid = true;
+              control.index = indiceColonna - i;
+            }
+          }
+        }
+        //se control.player = 2, control.null = 2 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        if (control.player === 2 && control.null === 2 && control.indexValid) {
+          console.log('Trio diagonale sinistro sensato possibile');
+          console.log(
+            'Combinazione duo sensato intercettata:',
+            control.combination
+          );
+          result.found = true;
+          result.colIndex = control.index;
+          return result;
+        }
+      }
+    }
+
     return result;
   }
 
-  // ******************Prova**********
-  // // CERCA FORZA 4 O BLOCCO ORIZZONTALE
-  // findTrioeHorizontal2(
-  //   numRow: number,
-  //   numCol: number,
-  //   grid: string[][],
-  //   player: string
-  // ) {
-  //   const result = {
-  //     found: false,
-  //     colIndex: 0,
-  //   };
+  findSingleDiagonal3(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    player: string
+  ) {
+    //diagonale destro
+    const result = {
+      found: false,
+      colIndex: 0,
+    };
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 4;
+        indiceColonna++
+      ) {
+        let control = {
+          player: 0,
+          null: 0,
+          index: -1,
+          indexValid: false,
+          combination: [] as string[],
+        };
+        //scansiona a 4 a 4
+        for (let i = 0; i < 4; i++) {
+          //se nella cella c'è player incrementa player
+          if (grid[indiceRiga - i][indiceColonna + i] === player) {
+            control.player++;
+            control.combination.push('x');
+          }
+          //se nella cella c'è null incrementa null
+          else if (grid[indiceRiga - i][indiceColonna + i] === null) {
+            control.null++;
+            control.combination.push('-');
+            //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
+            if (
+              indiceRiga - i === numRow - 1 ||
+              grid[indiceRiga - i + 1][indiceColonna + i] !== null
+            ) {
+              control.indexValid = true;
+              control.index = indiceColonna + i;
+            }
+          }
+        }
+        //se control.player = 1, control.null = 3 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        if (control.player === 1 && control.null === 3 && control.indexValid) {
+          console.log('Duo diagonale destro sensato possibile');
+          console.log(
+            'Combinazione singola sensata intercettata:',
+            control.combination
+          );
+          result.found = true;
+          result.colIndex = control.index;
+          return result;
+        }
+      }
+    }
+    //diagonale sinistro
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (
+        let indiceColonna = numCol - 1;
+        indiceColonna >= 3;
+        indiceColonna--
+      ) {
+        let control = {
+          player: 0,
+          null: 0,
+          index: -1,
+          indexValid: false,
+          combination: [] as string[],
+        };
+        //scansiona a 4 a 4
+        for (let i = 0; i < 4; i++) {
+          //se nella cella c'è player incrementa player
+          if (grid[indiceRiga - i][indiceColonna - i] === player) {
+            control.player++;
+            control.combination.push('x');
+          }
+          //se nella cella c'è null incrementa null
+          else if (grid[indiceRiga - i][indiceColonna - i] === null) {
+            control.null++;
+            control.combination.push('-');
+            //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
+            if (
+              indiceRiga - i === numRow - 1 ||
+              grid[indiceRiga - i + 1][indiceColonna - i] !== null
+            ) {
+              control.indexValid = true;
+              control.index = indiceColonna - i;
+            }
+          }
+        }
+        //se control.player = 1, control.null = 3 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+        if (control.player === 1 && control.null === 3 && control.indexValid) {
+          console.log('Duo diagonale sinistro sensato possibile');
+          console.log(
+            'Combinazione singola sensata intercettata:',
+            control.combination
+          );
+          result.found = true;
+          result.colIndex = control.index;
+          return result;
+        }
+      }
+    }
 
-  //   // Per ogni riga
-  //   // Per ogni colonna possibile
-  //   // A 4 a 4 orizzontale
-  //   // Controlla se ci sono 3 celle uguali e una vuota
-  //   // Se c'è una vuota e quella sotto è piena, restituisce indice di colonna della casella vuota
-  //   for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
-  //     for (
-  //       let indiceColonna = 0;
-  //       indiceColonna <= numCol - 4;
-  //       indiceColonna++
-  //     ) {
-  //       let countPlayerCells = 0;
-  //       let emptyCellIndex = -1;
+    return result;
+  }
 
-  //       for (let i = 0; i < 4; i++) {
-  //         if (grid[indiceRiga][indiceColonna + i] === player) {
-  //           countPlayerCells++;
-  //         } else if (grid[indiceRiga][indiceColonna + i] === null) {
-  //           emptyCellIndex = indiceColonna + i;
-  //         }
-  //       }
+  //Orizzontali
+  findTrioHorizontal3(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    player: string
+  ) {
+    const result = {
+      found: false,
+      colIndex: 0,
+    };
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 4;
+        indiceColonna++
+      ) {
+        //Orizzontale
+        const result = {
+          found: false,
+          colIndex: 0,
+        };
+        for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+          for (
+            let indiceColonna = 0;
+            indiceColonna <= numCol - 4;
+            indiceColonna++
+          ) {
+            let control = {
+              player: 0,
+              null: 0,
+              index: -1,
+              indexValid: false,
+              combination: [] as string[],
+            };
+            //scansiona a 4 a 4
+            for (let i = 0; i < 4; i++) {
+              //se nella cella c'è player incrementa player
+              if (grid[indiceRiga][indiceColonna + i] === player) {
+                control.player++;
+                control.combination.push('x');
+              }
+              //se nella cella c'è null incrementa null
+              else if (grid[indiceRiga][indiceColonna + i] === null) {
+                control.null++;
+                control.combination.push('-');
+                //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
+                if (
+                  indiceRiga === numRow - 1 ||
+                  grid[indiceRiga][indiceColonna + i] !== null
+                ) {
+                  control.indexValid = true;
+                  control.index = indiceColonna + i;
+                }
+              }
+            }
+            //se control.player = 3, control.null = 1 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+            if (
+              control.player === 3 &&
+              control.null === 1 &&
+              control.indexValid
+            ) {
+              console.log('Forza4 orizzontale sensato possibile');
+              console.log(
+                'Combinazione trio sensato intercettata:',
+                control.combination
+              );
+              result.found = true;
+              result.colIndex = control.index;
+              return result;
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
 
-  //       if (
-  //         countPlayerCells === 3 &&
-  //         emptyCellIndex !== -1 &&
-  //         (indiceRiga === numRow - 1 ||
-  //           grid[indiceRiga + 1][emptyCellIndex] !== null)
-  //       ) {
-  //         console.log("Trio orizzontale sensato");
-  //         result.found = true;
-  //         result.colIndex = emptyCellIndex;
-  //         return result;
-  //       }
-  //     }
-  //   }
+  findDuoHorizontal(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    player: string
+  ) {
+    const result = {
+      found: false,
+      colIndex: 0,
+    };
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 4;
+        indiceColonna++
+      ) {
+        //Orizzontale
+        const result = {
+          found: false,
+          colIndex: 0,
+        };
+        for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+          for (
+            let indiceColonna = 0;
+            indiceColonna <= numCol - 4;
+            indiceColonna++
+          ) {
+            let control = {
+              player: 0,
+              null: 0,
+              index: -1,
+              indexValid: false,
+              combination: [] as string[],
+            };
+            //scansiona a 4 a 4
+            for (let i = 0; i < 4; i++) {
+              //se nella cella c'è player incrementa player
+              if (grid[indiceRiga][indiceColonna + i] === player) {
+                control.player++;
+                control.combination.push('x');
+              }
+              //se nella cella c'è null incrementa null
+              else if (grid[indiceRiga][indiceColonna + i] === null) {
+                control.null++;
+                control.combination.push('-');
+                //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
+                if (
+                  indiceRiga === numRow - 1 ||
+                  grid[indiceRiga][indiceColonna + i] !== null
+                ) {
+                  control.indexValid = true;
+                  control.index = indiceColonna + i;
+                }
+              }
+            }
+            //se control.player = 2, control.null = 2 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+            if (
+              control.player === 2 &&
+              control.null === 2 &&
+              control.indexValid
+            ) {
+              console.log('Trio orizzontale sensato possibile');
+              console.log(
+                'Combinazione duo sensato intercettata:',
+                control.combination
+              );
+              result.found = true;
+              result.colIndex = control.index;
+              return result;
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
 
-  //   return result; // Nessuna casella trovata
-  // }
+  findSingleHorizontal3(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    player: string
+  ) {
+    const result = {
+      found: false,
+      colIndex: 0,
+    };
+    for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
+      for (
+        let indiceColonna = 0;
+        indiceColonna <= numCol - 4;
+        indiceColonna++
+      ) {
+        //Orizzontale
+        const result = {
+          found: false,
+          colIndex: 0,
+        };
+        for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+          for (
+            let indiceColonna = 0;
+            indiceColonna <= numCol - 4;
+            indiceColonna++
+          ) {
+            let control = {
+              player: 0,
+              null: 0,
+              index: -1,
+              indexValid: false,
+              combination: [] as string[],
+            };
+            //scansiona a 4 a 4
+            for (let i = 0; i < 4; i++) {
+              //se nella cella c'è player incrementa player
+              if (grid[indiceRiga][indiceColonna + i] === player) {
+                control.player++;
+                control.combination.push('x');
+              }
+              //se nella cella c'è null incrementa null
+              else if (grid[indiceRiga][indiceColonna + i] === null) {
+                control.null++;
+                control.combination.push('-');
+                //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
+                if (
+                  indiceRiga === numRow - 1 ||
+                  grid[indiceRiga][indiceColonna + i] !== null
+                ) {
+                  control.indexValid = true;
+                  control.index = indiceColonna + i;
+                }
+              }
+            }
+            //se control.player = 1, control.null = 3 e indexValid = true, restiruisci result colIndex = indiceColonna e found = true
+            if (
+              control.player === 1 &&
+              control.null === 3 &&
+              control.indexValid
+            ) {
+              console.log('Duo orizzontale sensato possibile');
+              console.log(
+                'Combinazione singola sensata intercettata:',
+                control.combination
+              );
+              result.found = true;
+              result.colIndex = control.index;
+              return result;
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
 
-  // // CERCA FORZA 4 O BLOCCO OBLIQUO DESTRO E SINISTRO
-  // findTrioDiagonal2(
-  //   numRow: number,
-  //   numCol: number,
-  //   grid: string[][],
-  //   player: string
-  // ) {
-  //   const result = {
-  //     found: false,
-  //     colIndex: 0,
-  //   };
-  //   // Per ogni riga possibile
-  //   // Per ogni colonna possibile
-  //   // A 4 a 4 obliqui destro e sinistro
-  //   // Controlla se ci sono 3 celle uguali e una vuota
-  //   // Se c'è una vuota e quella sotto è piena, restituisce indice di colonna della casella vuota
-
-  //   //tris diagonale sinistro
-  //   for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-  //     //trio diagonale destro
-  //     for (
-  //       let indiceColonna = 0;
-  //       indiceColonna <= numCol - 4;
-  //       indiceColonna++
-  //     ) {
-  //       let countPlayerCells = 0;
-  //       let emptyCellIndex = -1;
-  //       for (let i = 0; i < 4; i++) {
-  //         console.log("controllo tris diagonale sinistro",indiceRiga - i, indiceColonna + i);
-  //         if (grid[indiceRiga - i][indiceColonna + i] === player) {
-  //           countPlayerCells++;
-  //         } else if (grid[indiceRiga - i][indiceColonna + i] === null) {
-  //           emptyCellIndex = indiceColonna + i; //colonna di partenza controllo + indice ciclo interno
-  //         }
-  //       }
-
-  //       if (
-  //         countPlayerCells === 3 &&
-  //         emptyCellIndex !== -1 &&
-  //         (indiceRiga === numRow - 1 ||
-  //           grid[indiceRiga + 1][emptyCellIndex] !== null)
-  //       ) {
-  //         console.log("Trio diagonale destro sensato");
-  //         result.found = true;
-  //         result.colIndex = emptyCellIndex;
-  //         return result;
-  //       }
-  //     }
-  //   }
-  //   //tris diagonale sinistro
-  //   for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-  //     for (
-  //       let indiceColonna = numCol - 1;
-  //       indiceColonna >= 3;
-  //       indiceColonna--
-  //     ) {
-  //       let countPlayerCells = 0;
-  //       let emptyCellIndex = -1;
-  //       for (let i = 0; i < 4; i++) {
-  //         console.log("controllo tris diagonale sinistro",indiceRiga - i, indiceColonna - i);
-  //         if (grid[indiceRiga - i][indiceColonna - i] === player) {
-  //           countPlayerCells++;
-  //         } else if (grid[indiceRiga - i][indiceColonna - i] === null) {
-  //           emptyCellIndex = indiceColonna - i; //colonna di partenza controllo - indice ciclo interno
-  //         }
-  //       }
-
-  //       if (
-  //         countPlayerCells === 3 &&
-  //         emptyCellIndex !== -1 &&
-  //         (indiceRiga === numRow - 1 ||
-  //           grid[indiceRiga + 1][emptyCellIndex] !== null)
-  //       ) {
-  //         console.log("Trio diagonale sinistro sensato");
-  //         result.found = true;
-  //         result.colIndex = emptyCellIndex;
-  //         return result;
-  //       }
-  //     }
-  //   }
-
-  //   return result;
-  // }
-
-  // //CERCA DI FARE UN TRIS SENSATO ORIZZONTALE
-
-  // findCoupleHorizontal2(
-  //   numRow: number,
-  //   numCol: number,
-  //   grid: string[][],
-  //   player: string
-  // ) {
-  //   const result = {
-  //     found: false,
-  //     colIndex: 0,
-  //   };
-
-  //   // Per ogni riga possibile
-  //   // Per ogni colonna possibile
-  //   // A 4 a 4 orizzontale
-  //   // Controlla se ci sono 2 celle uguali e 2 vuote
-  //   // Se c'è almeno una casella piena sotto a una delle due vuote, restituisce indice di colonna di quella casella vuota
-  //   for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
-  //     for (
-  //       let indiceColonna = 0;
-  //       indiceColonna <= numCol - 4;
-  //       indiceColonna++
-  //     ) {
-  //       let countPlayerCells = 0;
-  //       let countEmptyCells = 0;
-  //       let emptyCellIndex = -1;
-
-  //       for (let i = 0; i < 4; i++) {
-  //         if (grid[indiceRiga][indiceColonna + i] === player) {
-  //           countPlayerCells++;
-  //         } else if (grid[indiceRiga][indiceColonna + i] === null) {
-  //           countEmptyCells++;
-  //           emptyCellIndex = indiceColonna + i;
-  //         }
-  //       }
-
-  //       if (
-  //         countPlayerCells === 2 &&
-  //         countEmptyCells === 2 &&
-  //         (indiceRiga === numRow - 1 ||
-  //           grid[indiceRiga + 1][emptyCellIndex] !== null)
-  //       ) {
-  //         console.log("Duo orizzontale sensato trovato");
-  //         result.found = true;
-  //         result.colIndex = emptyCellIndex;
-  //         return result;
-  //       }
-  //     }
-  //   }
-
-  //   return result; // Nessuna casella trovata
-  // }
-  // //CERCA DI FARE UN TRIS SENSATO OBLIQUO DESTRO E SINISTRO
-  // findCoupleDiagonal2(
-  //   numRow: number,
-  //   numCol: number,
-  //   grid: string[][],
-  //   player: string
-  // ) {
-  //   const result = {
-  //     found: false,
-  //     colIndex: 0,
-  //   };
-  //   // Per ogni riga possibile
-  //   // Per ogni colonna possibile
-  //   // A 4 a 4 obliqui destro e sinistro
-  //    // Controlla se ci sono 2 celle uguali e 2 vuote
-  //   // Se c'è almeno una casella piena sotto a una delle due vuote, restituisce indice di colonna di quella casella vuota
-
-  //   //tris diagonale destro
-  //   for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-
-  //     for (
-  //       let indiceColonna = 0;
-  //       indiceColonna <= numCol - 4;
-  //       indiceColonna++
-  //     ) {
-  //       let countPlayerCells = 0;
-  //       let countEmptyCells = 0;
-  //       let emptyCellIndex = -1;
-  //       for (let i = 0; i < 4; i++) {
-  //         if (grid[indiceRiga - i][indiceColonna + i] === player) {
-  //           countPlayerCells++;
-  //         } else if (grid[indiceRiga - i][indiceColonna + i] === null) {
-  //           countEmptyCells++;
-  //           emptyCellIndex = indiceColonna + i; //colonna di partenza controllo + indice ciclo interno
-  //         }
-  //       }
-
-  //       if (
-  //         countPlayerCells === 2 &&
-  //         countEmptyCells === 2 &&
-  //         (indiceRiga === numRow - 1 ||
-  //           grid[indiceRiga + 1][emptyCellIndex] !== null)
-  //       ) {
-  //         console.log("Trio diagonale destro sensato");
-  //         result.found = true;
-  //         result.colIndex = emptyCellIndex;
-  //         return result;
-  //       }
-  //     }
-  //   }
-  //   //tris diagonale sinistro
-  //   for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
-  //     for (
-  //       let indiceColonna = numCol - 1;
-  //       indiceColonna >= 3;
-  //       indiceColonna--
-  //     ) {
-  //       let countPlayerCells = 0;
-  //       let emptyCellIndex = -1;
-  //       let countEmptyCells = 0;
-  //       for (let i = 0; i < 4; i++) {
-  //         if (grid[indiceRiga - i][indiceColonna - i] === player) {
-  //           countPlayerCells++;
-  //         } else if (grid[indiceRiga - i][indiceColonna - i] === null) {
-  //           countEmptyCells++;
-  //           emptyCellIndex = indiceColonna - i; //colonna di partenza controllo - indice ciclo interno
-  //         }
-  //       }
-
-  //       if (
-  //         countPlayerCells === 2 &&
-  //         countEmptyCells === 2 &&
-  //         (indiceRiga === numRow - 1 ||
-  //           grid[indiceRiga + 1][emptyCellIndex] !== null)
-  //       ) {
-  //         console.log("Trio diagonale destro sensato");
-  //         result.found = true;
-  //         result.colIndex = emptyCellIndex;
-  //         return result;
-  //       }
-  //     }
-  //   }
-
-  //   return result;
-  // }
+  //Verticali
+  findTrioVertical3(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    player: string
+  ) {
+    const result = {
+      found: false,
+      colIndex: 0,
+    };
+    //streak verticale
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (let indiceColonna = 0; indiceColonna < numCol; indiceColonna++) {
+        //Controllo combinazione XXXnull
+        if (
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna] === player &&
+          grid[indiceRiga - 2][indiceColonna] === player &&
+          grid[indiceRiga - 3][indiceColonna] === null
+        ) {
+          console.log('Forza4 verticale sensato possibile');
+          console.log('Combinazione trio sensata intercettata: xxx-');
+          result.found = true;
+          result.colIndex = indiceColonna;
+          return result;
+        }
+      }
+    }
+    return result;
+  }
+  findCoupleVertical3(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    player: string
+  ) {
+    const result = {
+      found: false,
+      colIndex: 0,
+    };
+    //duo verticale
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (let indiceColonna = 0; indiceColonna < numCol; indiceColonna++) {
+        //Controllo combinazione XXnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna] === player &&
+          grid[indiceRiga - 2][indiceColonna] === null &&
+          grid[indiceRiga - 3][indiceColonna] === null
+        ) {
+          console.log('Trio verticale sensato possibile');
+          console.log('Combinazione doppio sensata intercettata: xx--');
+          result.found = true;
+          result.colIndex = indiceColonna;
+          return result;
+        }
+      }
+    }
+    return result;
+  }
+  findSingleVertical3(
+    numRow: number,
+    numCol: number,
+    grid: string[][],
+    player: string
+  ) {
+    const result = {
+      found: false,
+      colIndex: 0,
+    };
+    //duo verticale
+    for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
+      for (let indiceColonna = 0; indiceColonna < numCol; indiceColonna++) {
+        //Controllo combinazione Xnullnullnull
+        if (
+          grid[indiceRiga][indiceColonna] === player &&
+          grid[indiceRiga - 1][indiceColonna] === null &&
+          grid[indiceRiga - 2][indiceColonna] === null &&
+          grid[indiceRiga - 3][indiceColonna] === null
+        ) {
+          console.log('Duo verticale sensato possibile');
+          console.log('Combinazione singolo sensato intercettata: x---');
+          result.found = true;
+          result.colIndex = indiceColonna;
+          return result;
+        }
+      }
+    }
+    return result;
+  }
 }
