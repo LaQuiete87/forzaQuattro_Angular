@@ -60,6 +60,7 @@ export class GameServiceService {
     grid: string[][],
     player: string
   ): boolean {
+    
     //streak diagonale destro
     for (let indiceRiga = numRow - 1; indiceRiga >= 3; indiceRiga--) {
       for (
@@ -77,8 +78,7 @@ export class GameServiceService {
           grid[indiceRiga - 3][indiceColonna + 3] === player
         ) {
           console.log(`${player} ha fatto streak diagonale destro`);
-          // this.winner = true;
-          // this.typeOfStreak = 'diagonale destro';
+     
           return true;
         }
       }
@@ -90,9 +90,7 @@ export class GameServiceService {
         indiceColonna >= 3;
         indiceColonna--
       ) {
-        // console.log(
-        //   `Controllo diagonale sinistro: (${indiceRiga}, ${indiceColonna})`
-        // );
+    
         if (
           grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna - 1] === player &&
@@ -100,8 +98,6 @@ export class GameServiceService {
           grid[indiceRiga - 3][indiceColonna - 3] === player
         ) {
           console.log(`${player} ha fatto diagonale sinistro`);
-          // this.winner = true;
-          // this.typeOfStreak = 'diagonale sinistro';
           return true;
         }
       }
@@ -445,6 +441,7 @@ export class GameServiceService {
     grid: string[][],
     player: string
   ): boolean {
+ 
     for (let indiceRiga = numRow - 1; indiceRiga >= 0; indiceRiga--) {
       for (
         let indiceColonna = 0;
@@ -505,7 +502,7 @@ export class GameServiceService {
             //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
             if (
               indiceRiga === numRow - 1 ||
-              grid[indiceRiga][indiceColonna + i] !== null
+              grid[indiceRiga+1][indiceColonna + i] !== null
             ) {
               control.indexValid = true;
               control.index = indiceColonna + i;
@@ -564,7 +561,7 @@ export class GameServiceService {
             //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
             if (
               indiceRiga === numRow - 1 ||
-              grid[indiceRiga][indiceColonna + i] !== null
+              grid[indiceRiga+1][indiceColonna + i] !== null
             ) {
               control.indexValid = true;
               control.index = indiceColonna + i;
@@ -623,7 +620,7 @@ export class GameServiceService {
             //se la cella sotto la cella null è piena indexValid = true e index = indiceColonna + i
             if (
               indiceRiga === numRow - 1 ||
-              grid[indiceRiga][indiceColonna + i] !== null
+              grid[indiceRiga+1][indiceColonna + i] !== null
             ) {
               control.indexValid = true;
               control.index = indiceColonna + i;
