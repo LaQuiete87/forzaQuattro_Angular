@@ -128,13 +128,20 @@ export class GameComponent {
     };
   }
 
-  playerColor(currentPlayer: string) {
-    if (currentPlayer === 'CPU_1') return { 'background-color': 'yellow' };
-
-    if (currentPlayer === 'CPU_2') return { 'background-color': 'red' };
-
-    return;
+  playerColor(cell: string) {
+    if (cell === 'CPU_1') {
+      return { 'background-color': 'yellow' }; // Colore per CPU_1
+    }
+    
+    if (cell === 'CPU_2') {
+      return { 'background-color': 'red' }; // Colore per CPU_2
+    }
+  
+    // // Colore trasparente per celle vuote
+    // return { 'background-color': 'transparent' };
+    return
   }
+  
 
   // Metodo per provare a inserire la pedina in una colonna casuale
   async tryPlaceRandomPawn() {

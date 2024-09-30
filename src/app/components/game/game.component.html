@@ -17,10 +17,10 @@
 
   <div class="container">
     <div class="d-flex justify-content-center">
-      <table>
+      <table class="boardGame">
         <tr *ngFor="let row of grid">
-          <td *ngFor="let cell of row" ngsty [ngStyle]="playerColor(cell)">
-            {{ cell }}
+          <td *ngFor="let cell of row" class="cell">
+            <div class="disc" [ngStyle]="playerColor(cell)"></div>
           </td>
         </tr>
       </table>
