@@ -1,43 +1,192 @@
-<div class="container" id="gameContainer">
-  <h1>Game</h1>
-
-  <h2>Scegli il formato di gioco</h2>
-
-  <button class="btn btn-dark me-5" (click)="generateBoardGame('5x5')">
-    5 x 5
-  </button>
-
-  <button class="btn btn-dark" (click)="generateBoardGame('7x6')">7 x 6</button>
-
-  @if(boardGameSize){
-
-  <h2>Sei in {{ boardGameSize }}</h2>
-
-  <p>{{ randomNumber }}</p>
-
-  <div class="container">
-    <div class="d-flex justify-content-center">
-      <table class="boardGame">
-        <tr *ngFor="let row of grid">
-          <td *ngFor="let cell of row" class="cell"  [ngStyle]="playerColor(cell)">
-           
-            
-          </td>
-        </tr>
-      </table>
+<div class="container mt-4" id="gameContainer">
+  <div class="row mb-5">
+    <div class="col d-flex justify-content-start align-items-center" id="title">
+      <h1 class="my-0 me-2">Forza 4</h1>
+      <div class="d-flex border border-2 rounded-3 border-info p-1">
+        <p class="bi bi-circle-fill bg-danger fs-1 me-1"></p>
+        <p class="bi bi-circle-fill bg-warning fs-1"></p>
+      </div>
     </div>
-    <div class="text-center">
+  </div>
+  @if(!boardGameSize){
+  <div class="row mb-3">
+    <div class="col">
+      <h4 class="text-center">Scegli il formato di gioco</h4>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col d-flex-column d-md-flex">
       <button
-        [disabled]="winner || draw"
-        class="btn btn-secondary mt-3 w-50 p-2"
-        (click)="play()"
+        class="btn btn-outline-primary me-5 d-block w-100 mb-3 mb-md-0 p-3 fs-3"
+        (click)="generateBoardGame('5x5')"
       >
-        Gioca
+        5 x 5
+      </button>
+
+      <button
+        class="btn btn-outline-primary d-block w-100 p-3 fs-3"
+        (click)="generateBoardGame('7x6')"
+      >
+        7 x 6
       </button>
     </div>
+  </div>
+  } @if(boardGameSize){
 
-    @if(winner){ 
+  <div class="row">
+    <!-- Tabellone -->
+    <div class="col">
+      <table class="boardGame mx-auto">
+        <tr *ngFor="let row of grid">
+          <td
+            *ngFor="let cell of row"
+            class="cell"
+            [ngStyle]="playerColor(cell)"
+          ></td>
+        </tr>
+      </table>
+     @if(!winner && !draw){
+      <button
+      [disabled]="winner || draw"
+      class="btn btn-outline-success d-block w-50 mt-3 p-3 fs-3 mx-auto"
+      (click)="play()"
+    >
+      Gioca
+    </button>
+     }
+     @if(winner || draw){
+      <button
+      
+      class="btn btn-outline-success d-block w-50 mt-3 p-3 fs-3 mx-auto"
+      (click)="play()"
+    >
+      Gioca ancora
+    </button>
+     }
+    </div>
+    <!-- Statistiche partita vinta -->
+    @if(winner){
+    <div class="col d-flex flex-md-column">
       @if(currentPlayer === 'CPU_1'){
+      <div>
+        <h2>Vincitore: {{ matchStatistics.players[0].name }}</h2>
+        <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
+        <p>
+          Numero coordinate duplicate:{{
+            matchStatistics.players[0].numDuplicates
+          }}
+        </p>
+        <p>
+          Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
+        </p>
+        <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
+      </div>
+      <div class="col-6">
+        <h2>Avversario: {{ matchStatistics.players[1].name }}</h2>
+        <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
+        <p>
+          Numero coordinate duplicate:{{
+            matchStatistics.players[1].numDuplicates
+          }}
+        </p>
+        <p>
+          Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
+        </p>
+        <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
+      </div>
+      <div>
+        <h2>Avversario: {{ matchStatistics.players[1].name }}</h2>
+        <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
+        <p>
+          Numero coordinate duplicate:{{
+            matchStatistics.players[1].numDuplicates
+          }}
+        </p>
+        <p>
+          Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
+        </p>
+        <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
+      </div>
+
+      } @if(currentPlayer === 'CPU_2'){
+      <div>
+        <h2>Avversario: {{ matchStatistics.players[0].name }}</h2>
+        <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
+        <p>
+          Numero coordinate duplicate:{{
+            matchStatistics.players[0].numDuplicates
+          }}
+        </p>
+        <p>
+          Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
+        </p>
+        <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
+      </div>
+      <div>
+        <h2>Giocatore: {{ matchStatistics.players[0].name }}</h2>
+        <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
+        <p>
+          Numero coordinate duplicate:{{
+            matchStatistics.players[0].numDuplicates
+          }}
+        </p>
+        <p>
+          Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
+        </p>
+        <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
+      </div>
+      <div class="col-6">
+        <h2>Giocatore: {{ matchStatistics.players[1].name }}</h2>
+        <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
+        <p>
+          Numero coordinate duplicate:{{
+            matchStatistics.players[1].numDuplicates
+          }}
+        </p>
+        <p>
+          Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
+        </p>
+        <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
+      </div>
+
+      }
+    </div>
+    } @if(draw){
+    <div class="col col-md-4 d-flex flex-md-column">
+      <div>
+        <h2>Giocatore: {{ matchStatistics.players[0].name }}</h2>
+        <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
+        <p>
+          Numero coordinate duplicate:{{
+            matchStatistics.players[0].numDuplicates
+          }}
+        </p>
+        <p>
+          Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
+        </p>
+        <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
+      </div>
+      <div>
+        <h2>Giocatore: {{ matchStatistics.players[1].name }}</h2>
+        <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
+        <p>
+          Numero coordinate duplicate:{{
+            matchStatistics.players[1].numDuplicates
+          }}
+        </p>
+        <p>
+          Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
+        </p>
+        <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
+      </div>
+    </div>
+    }
+  </div>
+
+  <!-- Statistiche partita -->
+
+  <!-- @if(winner){ @if(currentPlayer === 'CPU_1'){
     <div class="container">
       <div class="row">
         <div class="col-6">
@@ -68,8 +217,7 @@
         </div>
       </div>
     </div>
-    }
-    @if(currentPlayer === 'CPU_2'){
+    } @if(currentPlayer === 'CPU_2'){
     <div class="container">
       <div class="row">
         <h1 class="col text-center">{{ currentPlayer }} Ha vinto</h1>
@@ -104,9 +252,8 @@
       </div>
     </div>
 
-    }
-   }
-    @if(draw){
+    } }
+     @if(draw){
     <div class="container">
       <div class="row">
         <h1 class="col text-center">Partita pareggiata</h1>
@@ -140,8 +287,7 @@
         </div>
       </div>
     </div>
-    }
-  </div>
+    } -->
 
   }
 </div>

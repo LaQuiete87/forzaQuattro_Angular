@@ -18,6 +18,7 @@ export class GameComponent {
   winner: boolean = false;
   columnIndexTarget: number = 0;
   draw: boolean = false;
+
   screenSize: number|null; //BP: 576px, 768px, 992px, 1200px
   matchStatistics = {
     players: [
@@ -49,7 +50,6 @@ export class GameComponent {
   onResize(event: any) {
     this.screenSize = event.target.innerWidth;
     console.log(this.screenSize);
-    // this.cdr.detectChanges();
   }
 
   //Cambio giocatore

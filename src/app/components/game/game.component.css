@@ -12,6 +12,12 @@ td {
 .boardGame {
   border-collapse: collapse;
 }
+#title p{
+width: 20px;
+height: 20px;
+border-radius: 50%;
+margin: 0;
+}
 
 .cell {
   background-repeat: no-repeat;
