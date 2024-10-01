@@ -136,6 +136,11 @@ export class GameComponent {
     };
   }
 
+  playAgain(){
+    this.resetGame()
+    this.boardGameSize = ''
+  }
+
   playerColor(cell: string) {
 
     if(this.screenSize!<400){
@@ -225,20 +230,20 @@ export class GameComponent {
    
       if (cell === 'CPU_1') {
         return { 'background-image': 'url("/img/Pedina_Gialla.png")',
-          'width':'100px',
-          'height':'100px'
+          'width':'130px',
+          'height':'130px'
          }; 
       }
       
       if (cell === 'CPU_2') {
         return { 'background-image': 'url("/img/Pedina_rossa.png")',
-          'width':'100px',
-          'height':'100px' }; 
+          'width':'130px',
+          'height':'130px' }; 
       }
       if (cell === null) {
         return { 'background-image': 'url("/img/Cella_vuota.png")',
-          'width':'100px',
-          'height':'100px' }; 
+          'width':'130px',
+          'height':'130px' }; 
         
       }
     return

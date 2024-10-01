@@ -24,3 +24,8 @@ margin: 0;
   background-size: contain;
   padding: 0;
 }
+.statistics p{
+  line-height: 2rem;
+  font-size: 20px;
+  
+}

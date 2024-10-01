@@ -34,9 +34,9 @@
   </div>
   } @if(boardGameSize){
 
-  <div class="row">
+  <div class="row d-flex flex-column flex-sm-row flex-lg-row justify-content-center align-items-center">
     <!-- Tabellone -->
-    <div class="col">
+    <div class="col-12 col-lg-9">
       <table class="boardGame mx-auto">
         <tr *ngFor="let row of grid">
           <td
@@ -59,7 +59,7 @@
       <button
       
       class="btn btn-outline-success d-block w-50 mt-3 p-3 fs-3 mx-auto"
-      (click)="play()"
+      (click)="playAgain()"
     >
       Gioca ancora
     </button>
@@ -67,227 +67,111 @@
     </div>
     <!-- Statistiche partita vinta -->
     @if(winner){
-    <div class="col d-flex flex-md-column">
+    <div class="col col-lg-3 statistics">
       @if(currentPlayer === 'CPU_1'){
-      <div>
-        <h2>Vincitore: {{ matchStatistics.players[0].name }}</h2>
-        <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
+     <div class="row d-flex flex-column flex-md-row flex-lg-column">
+      <div class=" col   px-4 py-3">
+        <h2 class="mb-2" [ngStyle]="{ color: 'green' }">Vincitore: {{ matchStatistics.players[0].name }}</h2>
+        <p>Numero turni: <strong>{{ matchStatistics.players[0].numTurns }}</strong></p>
         <p>
-          Numero coordinate duplicate:{{
+          Numero coordinate duplicate: <strong>{{
             matchStatistics.players[0].numDuplicates
-          }}
+          }}</strong>
         </p>
         <p>
-          Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
+          Numero mosse per vincere: <strong>{{ matchStatistics.players[0].numStreaks }}</strong>
         </p>
-        <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
+        <p>Numero blocchi: <strong>{{ matchStatistics.players[0].numBlocks }}</strong></p>
       </div>
-      <div class="col-6">
-        <h2>Avversario: {{ matchStatistics.players[1].name }}</h2>
-        <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
+      <div class=" col  px-4 py-3">
+        <h2 class="mb-2" [ngStyle]="{ color: 'red' }">Avversario: {{ matchStatistics.players[1].name }}</h2>
+        <p>Numero turni: <strong>{{ matchStatistics.players[1].numTurns }}</strong></p>
         <p>
-          Numero coordinate duplicate:{{
+          Numero coordinate duplicate: <strong>{{
             matchStatistics.players[1].numDuplicates
-          }}
+          }}</strong>
         </p>
         <p>
-          Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
+          Numero mosse per vincere: <strong>{{ matchStatistics.players[1].numStreaks }}</strong>
         </p>
-        <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
+        <p>Numero blocchi: <strong>{{ matchStatistics.players[1].numBlocks }}
+        </strong>
+        </p>
       </div>
-      <div>
-        <h2>Avversario: {{ matchStatistics.players[1].name }}</h2>
-        <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
-        <p>
-          Numero coordinate duplicate:{{
-            matchStatistics.players[1].numDuplicates
-          }}
-        </p>
-        <p>
-          Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
-        </p>
-        <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
-      </div>
+     </div>
+   
 
-      } @if(currentPlayer === 'CPU_2'){
-      <div>
-        <h2>Avversario: {{ matchStatistics.players[0].name }}</h2>
-        <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
+    } @if(currentPlayer === 'CPU_2'){
+      <div class="row d-flex flex-column flex-md-row flex-lg-column">
+        <div class="col  px-4 py-3">
+        <h2 [ngStyle]="{ color: 'red' }">Avversario: {{ matchStatistics.players[0].name }}</h2>
+        <p>Numero turni: <strong>{{ matchStatistics.players[0].numTurns }}
+          </strong>
+        </p>
         <p>
-          Numero coordinate duplicate:{{
+          Numero coordinate duplicate: <strong>{{
             matchStatistics.players[0].numDuplicates
-          }}
+          }}</strong>
         </p>
         <p>
-          Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
+          Numero mosse per vincere: <strong>{{ matchStatistics.players[0].numStreaks }}</strong>
         </p>
-        <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
-      </div>
-      <div>
-        <h2>Giocatore: {{ matchStatistics.players[0].name }}</h2>
-        <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
-        <p>
-          Numero coordinate duplicate:{{
-            matchStatistics.players[0].numDuplicates
-          }}
-        </p>
-        <p>
-          Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
-        </p>
-        <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
-      </div>
-      <div class="col-6">
-        <h2>Giocatore: {{ matchStatistics.players[1].name }}</h2>
-        <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
-        <p>
-          Numero coordinate duplicate:{{
-            matchStatistics.players[1].numDuplicates
-          }}
-        </p>
-        <p>
-          Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
-        </p>
-        <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
-      </div>
+        <p>Numero blocchi: <strong>{{ matchStatistics.players[0].numBlocks }}</strong></p>
+        </div>
+        <div class="col    px-4 py-3">
+        <h2 [ngStyle]="{ color: 'green' }">Vincitore: {{ matchStatistics.players[1].name }}</h2>
+          <p>Numero turni: <strong>{{ matchStatistics.players[1].numTurns }}</strong></p>
+          <p>
+            Numero coordinate duplicate: <strong>{{
+              matchStatistics.players[1].numDuplicates
+            }}</strong>
+          </p>
+          <p>
+            Numero mosse per vincere: <strong>{{ matchStatistics.players[1].numStreaks }}</strong>
+          </p>
+          <p>Numero blocchi:  <strong>{{ matchStatistics.players[1].numBlocks }}</strong> </p>
+        </div>
+     </div>
 
       }
     </div>
-    } @if(draw){
-    <div class="col col-md-4 d-flex flex-md-column">
-      <div>
-        <h2>Giocatore: {{ matchStatistics.players[0].name }}</h2>
-        <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
-        <p>
-          Numero coordinate duplicate:{{
-            matchStatistics.players[0].numDuplicates
-          }}
-        </p>
-        <p>
-          Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
-        </p>
-        <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
+    }
+     @if(draw){
+      <div class="col col-lg-3 statistics">
+
+        <div class="row d-flex flex-column flex-md-row flex-lg-column">
+          <div class="col  px-4 py-3">
+            <h2 [ngStyle]="{ color: 'orange' }">Giocatore: {{ matchStatistics.players[0].name }}</h2>
+          <p>Numero turni: <strong>{{ matchStatistics.players[0].numTurns }}</strong></p>
+          <p>
+            Numero coordinate duplicate: <strong>{{
+              matchStatistics.players[0].numDuplicates
+            }}</strong>
+          </p>
+          <p>
+            Numero mosse per vincere: <strong>{{ matchStatistics.players[0].numStreaks }}</strong>
+          </p>
+          <p>Numero blocchi: <strong>{{ matchStatistics.players[0].numBlocks }}</strong></p>
+          </div>
+          <div class="col  px-4 py-3">
+            <h2 [ngStyle]="{ color: 'orange' }">Giocatore: {{ matchStatistics.players[1].name }}</h2>
+          <p>Numero turni: <strong>{{ matchStatistics.players[1].numTurns }}</strong></p>
+          <p>
+            Numero coordinate duplicate: <strong>{{
+              matchStatistics.players[1].numDuplicates
+            }}</strong>
+          </p>
+          <p>
+            Numero mosse per vincere: <strong>{{ matchStatistics.players[1].numStreaks }}
+            </strong></p>
+          <p>Numero blocchi: <strong>{{ matchStatistics.players[1].numBlocks }}</strong></p>
+          </div>
+        </div>
       </div>
-      <div>
-        <h2>Giocatore: {{ matchStatistics.players[1].name }}</h2>
-        <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
-        <p>
-          Numero coordinate duplicate:{{
-            matchStatistics.players[1].numDuplicates
-          }}
-        </p>
-        <p>
-          Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
-        </p>
-        <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
-      </div>
-    </div>
     }
   </div>
 
-  <!-- Statistiche partita -->
 
-  <!-- @if(winner){ @if(currentPlayer === 'CPU_1'){
-    <div class="container">
-      <div class="row">
-        <div class="col-6">
-          <h2>Vincitore: {{ matchStatistics.players[0].name }}</h2>
-          <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
-          <p>
-            Numero coordinate duplicate:{{
-              matchStatistics.players[0].numDuplicates
-            }}
-          </p>
-          <p>
-            Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
-          </p>
-          <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
-        </div>
-        <div class="col-6">
-          <h2>Avversario: {{ matchStatistics.players[1].name }}</h2>
-          <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
-          <p>
-            Numero coordinate duplicate:{{
-              matchStatistics.players[1].numDuplicates
-            }}
-          </p>
-          <p>
-            Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
-          </p>
-          <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
-        </div>
-      </div>
-    </div>
-    } @if(currentPlayer === 'CPU_2'){
-    <div class="container">
-      <div class="row">
-        <h1 class="col text-center">{{ currentPlayer }} Ha vinto</h1>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <h2>Avversario: {{ matchStatistics.players[0].name }}</h2>
-          <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
-          <p>
-            Numero coordinate duplicate:{{
-              matchStatistics.players[0].numDuplicates
-            }}
-          </p>
-          <p>
-            Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
-          </p>
-          <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
-        </div>
-        <div class="col-6">
-          <h2>Vincitore: {{ matchStatistics.players[1].name }}</h2>
-          <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
-          <p>
-            Numero coordinate duplicate:{{
-              matchStatistics.players[1].numDuplicates
-            }}
-          </p>
-          <p>
-            Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
-          </p>
-          <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
-        </div>
-      </div>
-    </div>
-
-    } }
-     @if(draw){
-    <div class="container">
-      <div class="row">
-        <h1 class="col text-center">Partita pareggiata</h1>
-      </div>
-      <div class="row">
-        <div class="col-6">
-          <h2>Giocatore: {{ matchStatistics.players[0].name }}</h2>
-          <p>Numero turni:{{ matchStatistics.players[0].numTurns }}</p>
-          <p>
-            Numero coordinate duplicate:{{
-              matchStatistics.players[0].numDuplicates
-            }}
-          </p>
-          <p>
-            Numero mosse per vincere:{{ matchStatistics.players[0].numStreaks }}
-          </p>
-          <p>Numero blocchi:{{ matchStatistics.players[0].numBlocks }}</p>
-        </div>
-        <div class="col-6">
-          <h2>Giocatore: {{ matchStatistics.players[1].name }}</h2>
-          <p>Numero turni:{{ matchStatistics.players[1].numTurns }}</p>
-          <p>
-            Numero coordinate duplicate:{{
-              matchStatistics.players[1].numDuplicates
-            }}
-          </p>
-          <p>
-            Numero mosse per vincere:{{ matchStatistics.players[1].numStreaks }}
-          </p>
-          <p>Numero blocchi:{{ matchStatistics.players[1].numBlocks }}</p>
-        </div>
-      </div>
-    </div>
-    } -->
 
   }
 </div>
