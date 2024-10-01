@@ -48,7 +48,7 @@
       </table>
      @if(!winner && !draw){
       <button
-      [disabled]="winner || draw"
+      [disabled]="gameInProgress"
       class="btn btn-outline-success d-block w-50 mt-3 p-3 fs-3 mx-auto"
       (click)="play()"
     >

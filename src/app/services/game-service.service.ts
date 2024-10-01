@@ -12,6 +12,7 @@ export class GameServiceService {
 
   constructor(private http: HttpClient) {}
 
+  //Chiamata HTTP per ottenere un numero casuale coerente alla dimensione di gioco scelta
   getRandomNumber(boardGameSize: string): Observable<number> {
     if (boardGameSize == '5x5') {
       return this.http.get<number>(`${this.numRandomAPI}${4}`);
@@ -50,8 +51,6 @@ export class GameServiceService {
     return false;
   }
 
-  // *****VERSIONI COMPRESE*****
-
   //Diagonali
   //Verifica vincita/blocco e mosse sensate in diagonale
   forza4Diagonal(
@@ -68,9 +67,7 @@ export class GameServiceService {
         indiceColonna <= numCol - 4;
         indiceColonna++
       ) {
-        // console.log(
-        //   `Controllo diagonale destro: (${indiceRiga}, ${indiceColonna})`
-        // );
+    
         if (
           grid[indiceRiga][indiceColonna] === player &&
           grid[indiceRiga - 1][indiceColonna + 1] === player &&
@@ -645,7 +642,6 @@ export class GameServiceService {
 
   //Verticali
   //Verifica vincita/blocco e mosse sensate in verticale
-
   forza4Vertical(
     numRow: number,
     numCol: number,

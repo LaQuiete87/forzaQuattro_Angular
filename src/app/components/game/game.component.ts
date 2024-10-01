@@ -1,7 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { GameServiceService } from '../../services/game-service.service';
 
-
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -18,19 +17,20 @@ export class GameComponent {
   winner: boolean = false;
   columnIndexTarget: number = 0;
   draw: boolean = false;
+  gameInProgress: boolean = false;
 
-  screenSize: number|null; //BP: 576px, 768px, 992px, 1200px
+  screenSize: number | null; //BP: 576px, 768px, 992px, 1200px
   matchStatistics = {
     players: [
       {
-        name: 'CPU_1',
+        name: 'Giallo',
         numTurns: 0,
         numDuplicates: 0,
         numStreaks: 0,
         numBlocks: 0,
       },
       {
-        name: 'CPU_2',
+        name: 'Rosso',
         numTurns: 0,
         numDuplicates: 0,
         numStreaks: 0,
@@ -38,13 +38,10 @@ export class GameComponent {
       },
     ],
   };
- 
-
 
   constructor(private gameService: GameServiceService) {
     this.screenSize = window.innerWidth;
   }
-  
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -72,9 +69,9 @@ export class GameComponent {
 
   //Genera il tabellone di gioco in base alla dimensione scelta
   generateBoardGame(size: string) {
-    //azzara tutti i dati di gioco
-    this.resetGame() 
-    //estrai un numero per saper chi inizia
+    //azzera tutti i dati di gioco
+    this.resetGame();
+    //estrai un numero casuale per saper chi inizia
     this.gameService.getRandomNumber(this.boardGameSize).subscribe({
       next: (data) => {
         console.log('***********************************');
@@ -113,20 +110,21 @@ export class GameComponent {
     console.log('Righe e colonne', this.numRow, this.numCol);
   }
 
+  //Resetta i dati di gioco
   resetGame() {
     this.winner = false;
     this.draw = false;
     this.matchStatistics = {
       players: [
         {
-          name: 'CPU_1',
+          name: 'Giallo',
           numTurns: 0,
           numDuplicates: 0,
           numStreaks: 0,
           numBlocks: 0,
         },
         {
-          name: 'CPU_2',
+          name: 'Rosso',
           numTurns: 0,
           numDuplicates: 0,
           numStreaks: 0,
@@ -136,132 +134,150 @@ export class GameComponent {
     };
   }
 
-  playAgain(){
-    this.resetGame()
-    this.boardGameSize = ''
+  //Fa partire una nuova partita
+  playAgain() {
+    this.resetGame();
+    this.boardGameSize = '';
+    this.gameInProgress = false;
   }
-
+  //Gestisce il colore delle pedine e le dimensioni delle celle
   playerColor(cell: string) {
-
-    if(this.screenSize!<400){
+    if (this.screenSize! < 400) {
       if (cell === 'CPU_1') {
-        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
-          'width':'38px',
-          'height':'38px'
-         }; 
+        return {
+          'background-image': 'url("/img/Pedina_Gialla.png")',
+          width: '38px',
+          height: '38px',
+        };
       }
-      
+
       if (cell === 'CPU_2') {
-        return { 'background-image': 'url("/img/Pedina_rossa.png")',
-          'width':'38px',
-          'height':'38px' }; 
+        return {
+          'background-image': 'url("/img/Pedina_rossa.png")',
+          width: '38px',
+          height: '38px',
+        };
       }
       if (cell === null) {
-        return { 'background-image': 'url("/img/Cella_vuota.png")',
-          'width':'38px',
-          'height':'38px' }; 
-        
+        return {
+          'background-image': 'url("/img/Cella_vuota.png")',
+          width: '38px',
+          height: '38px',
+        };
       }
     }
 
-    if(this.screenSize!<576){
+    if (this.screenSize! < 576) {
       if (cell === 'CPU_1') {
-        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
-          'width':'52px',
-          'height':'52px'
-         }; 
+        return {
+          'background-image': 'url("/img/Pedina_Gialla.png")',
+          width: '52px',
+          height: '52px',
+        };
       }
-      
+
       if (cell === 'CPU_2') {
-        return { 'background-image': 'url("/img/Pedina_rossa.png")',
-          'width':'52px',
-          'height':'52px' }; 
+        return {
+          'background-image': 'url("/img/Pedina_rossa.png")',
+          width: '52px',
+          height: '52px',
+        };
       }
       if (cell === null) {
-        return { 'background-image': 'url("/img/Cella_vuota.png")',
-          'width':'52px',
-          'height':'52px' }; 
-        
-      }
-    }
-   
-    if(this.screenSize!<768){
-      if (cell === 'CPU_1') {
-        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
-          'width':'70px',
-          'height':'70px'
-         }; 
-      }
-      
-      if (cell === 'CPU_2') {
-        return { 'background-image': 'url("/img/Pedina_rossa.png")',
-          'width':'70px',
-          'height':'70px' }; 
-      }
-      if (cell === null) {
-        return { 'background-image': 'url("/img/Cella_vuota.png")',
-          'width':'70px',
-          'height':'70px' }; 
-        
+        return {
+          'background-image': 'url("/img/Cella_vuota.png")',
+          width: '52px',
+          height: '52px',
+        };
       }
     }
 
-    if(this.screenSize!<995){
+    if (this.screenSize! < 768) {
       if (cell === 'CPU_1') {
-        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
-          'width':'90px',
-          'height':'90px'
-         }; 
+        return {
+          'background-image': 'url("/img/Pedina_Gialla.png")',
+          width: '70px',
+          height: '70px',
+        };
       }
-      
+
       if (cell === 'CPU_2') {
-        return { 'background-image': 'url("/img/Pedina_rossa.png")',
-          'width':'90px',
-          'height':'90px' }; 
+        return {
+          'background-image': 'url("/img/Pedina_rossa.png")',
+          width: '70px',
+          height: '70px',
+        };
       }
       if (cell === null) {
-        return { 'background-image': 'url("/img/Cella_vuota.png")',
-          'width':'90px',
-          'height':'90px' }; 
-        
+        return {
+          'background-image': 'url("/img/Cella_vuota.png")',
+          width: '70px',
+          height: '70px',
+        };
       }
     }
 
-   
+    if (this.screenSize! < 995) {
       if (cell === 'CPU_1') {
-        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
-          'width':'130px',
-          'height':'130px'
-         }; 
+        return {
+          'background-image': 'url("/img/Pedina_Gialla.png")',
+          width: '90px',
+          height: '90px',
+        };
       }
-      
+
       if (cell === 'CPU_2') {
-        return { 'background-image': 'url("/img/Pedina_rossa.png")',
-          'width':'130px',
-          'height':'130px' }; 
+        return {
+          'background-image': 'url("/img/Pedina_rossa.png")',
+          width: '90px',
+          height: '90px',
+        };
       }
       if (cell === null) {
-        return { 'background-image': 'url("/img/Cella_vuota.png")',
-          'width':'130px',
-          'height':'130px' }; 
-        
+        return {
+          'background-image': 'url("/img/Cella_vuota.png")',
+          width: '90px',
+          height: '90px',
+        };
       }
-    return
+    }
+
+    if (cell === 'CPU_1') {
+      return {
+        'background-image': 'url("/img/Pedina_Gialla.png")',
+        width: '130px',
+        height: '130px',
+      };
+    }
+
+    if (cell === 'CPU_2') {
+      return {
+        'background-image': 'url("/img/Pedina_rossa.png")',
+        width: '130px',
+        height: '130px',
+      };
+    }
+    if (cell === null) {
+      return {
+        'background-image': 'url("/img/Cella_vuota.png")',
+        width: '130px',
+        height: '130px',
+      };
+    }
+    return;
   }
-  
 
   // Metodo per provare a inserire la pedina in una colonna casuale
   async tryPlaceRandomPawn() {
     let placed = false;
     console.log('Inserisco la pedina casualmente');
-    // Finché la pedina non viene piazzata correttamente
+    // Finché la pedina non viene piazzata su una colonna libera viene chiamato il metodo tryToPlace()
     const tryToPlace = () => {
       // Estrai un numero casuale per la colonna
       return new Promise<void>((resolve, reject) => {
         this.gameService.getRandomNumber(this.boardGameSize).subscribe({
           next: (data) => {
             const colIndexRandom = data;
-
             console.log(
               'Prova ad inserire nella colonna con indice',
               colIndexRandom
@@ -274,16 +290,17 @@ export class GameComponent {
               colIndexRandom,
               this.grid
             );
-
+            // Se non riesce incrementa numDuplicates in base al giocatore in turno e richiama il metodo tryToPlace()
             if (!placed) {
-              // Se non è riuscito, riprova
               console.log('Colonna piena');
               // Incrementa numDuplicates in base al giocatore in turno
               this.currentPlayer === 'CPU_1'
                 ? this.matchStatistics.players[0].numDuplicates++
                 : this.matchStatistics.players[1].numDuplicates++;
               resolve(tryToPlace());
-            } else {
+            }
+            //se riesce risolve la promise
+            else {
               console.log(
                 `Pedina inserita nella colonna con indice ${colIndexRandom} `
               );
@@ -301,6 +318,7 @@ export class GameComponent {
 
   //Verifica la vittoria
   verifyVictory(): boolean {
+    // Verifica se qualcuno dei metodi è true
     const won =
       this.gameService.forza4Horizontal(
         this.numRow,
@@ -320,7 +338,7 @@ export class GameComponent {
         this.grid,
         this.currentPlayer
       );
-
+    //Se true il giocatore in turno ha vinto
     if (won) {
       this.winner = true;
       console.log('*****Hai vinto');
@@ -380,7 +398,8 @@ export class GameComponent {
     console.log('Non sono riuscito a vincere.');
     console.log('Provo a bloccare');
 
-    // //Cerca un trio orizzontale per bloccare
+    //Se non è stato possibile vincere, controlla se è possibile bloccare
+    //Cerca un trio orizzontale per bloccare
     target = this.gameService.findTrioHorizontal(
       this.numRow,
       this.numCol,
@@ -406,6 +425,7 @@ export class GameComponent {
         opponentPlayer
       );
 
+    //Se il target è stato trovato assegna l'indice trovato a columnIndexTarget
     if (target.found) {
       console.log('Trovata combinazione per bloccare');
       this.columnIndexTarget = target.colIndex;
@@ -519,60 +539,74 @@ export class GameComponent {
     return false;
   }
 
-  //Dà inizio al gioco
+  // Dà inizio al gioco
   async play() {
-    console.log('*********************');
-    // Incrementa il numero di turni in base al giocatore in turno
-    this.currentPlayer === 'CPU_1'
-      ? this.matchStatistics.players[0].numTurns++
-      : this.matchStatistics.players[1].numTurns++;
+    this.gameInProgress = true;
+    let myGame = setInterval(async () => {
+      console.log('*********************');
+      // Incrementa il numero di turni in base al giocatore in turno
+      this.currentPlayer === 'CPU_1'
+        ? this.matchStatistics.players[0].numTurns++
+        : this.matchStatistics.players[1].numTurns++;
 
-    console.log(`E' il turno di ${this.currentPlayer}`);
-    console.log(' Grid a inizio mossa', this.grid);
-    // Vinci o blocca se possibile
-    // se trova una combinazione vincente o da bloccare inserisci la pedina nella colonna trovata e mettila in basso garantendo la gravità del gioco
-    if (this.blockOrWin()) {
-      console.log('Block or Win trovato, posiziona per vincere o bloccare');
-      this.gameService.placePawn(
-        this.currentPlayer,
-        this.numRow,
-        this.columnIndexTarget,
-        this.grid
-      );
+      console.log(`E' il turno di ${this.currentPlayer}`);
 
-      //verifica se c'è stata una vincita/blocco o pareggio altrimenti cambia il giocatore
-      if (await this.endOrChangePlayer()) return;
-    }
-    //se non è stata trovata una combinazione vincente o da bloccare controlla se è possibile fare un tris sensato
-    else if (this.tryToMakeTrio()) {
-      console.log('Trovata combinazione per fare tris');
-      this.gameService.placePawn(
-        this.currentPlayer,
-        this.numRow,
-        this.columnIndexTarget,
-        this.grid
-      );
-      if (await this.endOrChangePlayer()) return;
+      // Vinci o blocca se possibile
+      // se trova una combinazione vincente o da bloccare per impedire la vincita inserisce la pedina nella colonna trovata e la mette in basso garantendo la gravità del gioco
+      if (this.blockOrWin()) {
+        console.log('Block or Win trovato, posiziona per vincere o bloccare');
+        this.gameService.placePawn(
+          this.currentPlayer,
+          this.numRow,
+          this.columnIndexTarget,
+          this.grid
+        );
+        //Verifica se c'è stata una vincita/blocco o pareggio altrimenti cambia il giocatore e va avanti
+        if (await this.endOrChangePlayer()) {
+          clearInterval(myGame);
+          return;
+        }
+      }
+      //se non è stato possibile vincere o bloccare controlla se è possibile fare un tris sensato
+      else if (this.tryToMakeTrio()) {
+        console.log('Trovata combinazione per fare tris');
+        this.gameService.placePawn(
+          this.currentPlayer,
+          this.numRow,
+          this.columnIndexTarget,
+          this.grid
+        );
+        if (await this.endOrChangePlayer()) {
+          clearInterval(myGame);
+          return;
+        }
+      }
       //se non è stata trovata una combinazione per fare un tris sensato controlla se è possibile fare un duo sensato
-    } else if (this.tryToMakeCouple()) {
-      console.log('Trovata combinazione per fare duo');
-      this.gameService.placePawn(
-        this.currentPlayer,
-        this.numRow,
-        this.columnIndexTarget,
-        this.grid
-      );
-      if (await this.endOrChangePlayer()) return;
-    }
-    //se non è stata trovata una combinazione per fare tris, inserisci la pedina casualmente
-    else {
-      //pedina casuale
-      await this.tryPlaceRandomPawn();
-      if (await this.endOrChangePlayer()) return;
-    }
+      else if (this.tryToMakeCouple()) {
+        console.log('Trovata combinazione per fare duo');
+        this.gameService.placePawn(
+          this.currentPlayer,
+          this.numRow,
+          this.columnIndexTarget,
+          this.grid
+        );
+        if (await this.endOrChangePlayer()) {
+          clearInterval(myGame);
+          return;
+        }
+      }
+      //se non è stata trovata una combinazione per fare duo sensato inserisce la pedina casualmente
+      else {
+        await this.tryPlaceRandomPawn();
+        if (await this.endOrChangePlayer()) {
+          clearInterval(myGame);
+          return;
+        }
+      }
+    }, 2000); // Ripete ogni 2 secondi
   }
 
-  //Controlla se la partita è finita o pareggiata. In caso contrario cambia giocatore
+  //Controlla se la partita è finita o pareggiata (true). In caso contrario cambia giocatore (false)
   async endOrChangePlayer() {
     // verifica vittoria
     this.verifyVictory();
