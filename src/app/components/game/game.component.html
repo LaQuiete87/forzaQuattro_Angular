@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" id="gameContainer">
   <h1>Game</h1>
 
   <h2>Scegli il formato di gioco</h2>
@@ -12,15 +12,16 @@
   @if(boardGameSize){
 
   <h2>Sei in {{ boardGameSize }}</h2>
-  <!-- <button (click)="getRandomNumber()">Genera numero</button> -->
+
   <p>{{ randomNumber }}</p>
 
   <div class="container">
     <div class="d-flex justify-content-center">
       <table class="boardGame">
         <tr *ngFor="let row of grid">
-          <td *ngFor="let cell of row" class="cell">
-            <div class="disc" [ngStyle]="playerColor(cell)"></div>
+          <td *ngFor="let cell of row" class="cell"  [ngStyle]="playerColor(cell)">
+           
+            
           </td>
         </tr>
       </table>
@@ -104,7 +105,7 @@
     </div>
 
     }
-   }7
+   }
     @if(draw){
     <div class="container">
       <div class="row">

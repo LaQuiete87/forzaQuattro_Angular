@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { GameServiceService } from '../../services/game-service.service';
-import { JsonPipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-game',
@@ -18,6 +18,7 @@ export class GameComponent {
   winner: boolean = false;
   columnIndexTarget: number = 0;
   draw: boolean = false;
+  screenSize: number|null; //BP: 576px, 768px, 992px, 1200px
   matchStatistics = {
     players: [
       {
@@ -36,13 +37,20 @@ export class GameComponent {
       },
     ],
   };
+ 
 
-  //   Numero di turni per finire la partita
-  // Numero di coordinate duplicate estratte
-  // Numero di "mosse sensate" per vincere fatte
-  // Numero di "mosse sensate" per bloccare l'avversario
 
-  constructor(private gameService: GameServiceService) {}
+  constructor(private gameService: GameServiceService) {
+    this.screenSize = window.innerWidth;
+  }
+  
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.screenSize = event.target.innerWidth;
+    console.log(this.screenSize);
+    // this.cdr.detectChanges();
+  }
 
   //Cambio giocatore
   changePlayer(currentPlayer: string) {
@@ -129,16 +137,110 @@ export class GameComponent {
   }
 
   playerColor(cell: string) {
-    if (cell === 'CPU_1') {
-      return { 'background-color': 'yellow' }; // Colore per CPU_1
+
+    if(this.screenSize!<400){
+      if (cell === 'CPU_1') {
+        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
+          'width':'38px',
+          'height':'38px'
+         }; 
+      }
+      
+      if (cell === 'CPU_2') {
+        return { 'background-image': 'url("/img/Pedina_rossa.png")',
+          'width':'38px',
+          'height':'38px' }; 
+      }
+      if (cell === null) {
+        return { 'background-image': 'url("/img/Cella_vuota.png")',
+          'width':'38px',
+          'height':'38px' }; 
+        
+      }
     }
-    
-    if (cell === 'CPU_2') {
-      return { 'background-color': 'red' }; // Colore per CPU_2
+
+    if(this.screenSize!<576){
+      if (cell === 'CPU_1') {
+        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
+          'width':'52px',
+          'height':'52px'
+         }; 
+      }
+      
+      if (cell === 'CPU_2') {
+        return { 'background-image': 'url("/img/Pedina_rossa.png")',
+          'width':'52px',
+          'height':'52px' }; 
+      }
+      if (cell === null) {
+        return { 'background-image': 'url("/img/Cella_vuota.png")',
+          'width':'52px',
+          'height':'52px' }; 
+        
+      }
     }
-  
-    // // Colore trasparente per celle vuote
-    // return { 'background-color': 'transparent' };
+   
+    if(this.screenSize!<768){
+      if (cell === 'CPU_1') {
+        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
+          'width':'70px',
+          'height':'70px'
+         }; 
+      }
+      
+      if (cell === 'CPU_2') {
+        return { 'background-image': 'url("/img/Pedina_rossa.png")',
+          'width':'70px',
+          'height':'70px' }; 
+      }
+      if (cell === null) {
+        return { 'background-image': 'url("/img/Cella_vuota.png")',
+          'width':'70px',
+          'height':'70px' }; 
+        
+      }
+    }
+
+    if(this.screenSize!<995){
+      if (cell === 'CPU_1') {
+        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
+          'width':'90px',
+          'height':'90px'
+         }; 
+      }
+      
+      if (cell === 'CPU_2') {
+        return { 'background-image': 'url("/img/Pedina_rossa.png")',
+          'width':'90px',
+          'height':'90px' }; 
+      }
+      if (cell === null) {
+        return { 'background-image': 'url("/img/Cella_vuota.png")',
+          'width':'90px',
+          'height':'90px' }; 
+        
+      }
+    }
+
+   
+      if (cell === 'CPU_1') {
+        return { 'background-image': 'url("/img/Pedina_Gialla.png")',
+          'width':'100px',
+          'height':'100px'
+         }; 
+      }
+      
+      if (cell === 'CPU_2') {
+        return { 'background-image': 'url("/img/Pedina_rossa.png")',
+          'width':'100px',
+          'height':'100px' }; 
+      }
+      if (cell === null) {
+        return { 'background-image': 'url("/img/Cella_vuota.png")',
+          'width':'100px',
+          'height':'100px' }; 
+        
+      }
     return
   }
   

@@ -1,42 +1,20 @@
 table {
-    border-collapse: collapse;
-  }
-  
-  td {
-    width: 100px;
-    height: 100px;
-    border: 1px solid black;
-    text-align: center;
-    vertical-align: middle;
-  }
-  .yellow{
-    background-color: yellow;
-  }
-  .red{
-    background-color: red;
-  }
+  border-collapse: collapse;
+}
 
+td {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  vertical-align: middle;
+}
 
-  .boardGame {
-    border-collapse: collapse;
-    background-color: blue; /* Colore dello sfondo della plancia */
-  }
-  
-  .cell {
-    width: 100px;
-    height: 100px;
-    border: 1px solid rgb(42, 42, 118);
-    position: relative; 
-  }
-  
-  .disc {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white; /* Colore di default: trasparente */
-  }
-  
+.boardGame {
+  border-collapse: collapse;
+}
+
+.cell {
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding: 0;
+}
