@@ -1,17 +1,15 @@
-table {
-  border-collapse: collapse;
-}
 
+.boardGame{
+  margin: 0;
+}
 td {
-  width: 100px;
-  height: 100px;
+  max-width: 130px;
+  max-height: 130px;
   text-align: center;
   vertical-align: middle;
 }
 
-.boardGame {
-  border-collapse: collapse;
-}
+
 #title p{
 width: 20px;
 height: 20px;

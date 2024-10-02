@@ -141,57 +141,61 @@ export class GameComponent {
     this.gameInProgress = false;
   }
   //Gestisce il colore delle pedine e le dimensioni delle celle
+  //BP: 576px, 768px, 992px, 1200px, 1400px
   playerColor(cell: string) {
+    // bp 400px
     if (this.screenSize! < 400) {
       if (cell === 'CPU_1') {
         return {
           'background-image': 'url("/img/Pedina_Gialla.png")',
-          width: '38px',
-          height: '38px',
+          width: '37px',
+          height: '37px',
         };
       }
 
       if (cell === 'CPU_2') {
         return {
           'background-image': 'url("/img/Pedina_rossa.png")',
-          width: '38px',
-          height: '38px',
+          width: '37px',
+          height: '37px',
         };
       }
       if (cell === null) {
         return {
           'background-image': 'url("/img/Cella_vuota.png")',
-          width: '38px',
-          height: '38px',
+          width: '37px',
+          height: '37px',
         };
       }
     }
 
+    // bp 576px
     if (this.screenSize! < 576) {
       if (cell === 'CPU_1') {
         return {
           'background-image': 'url("/img/Pedina_Gialla.png")',
-          width: '52px',
-          height: '52px',
+          width: '48px',
+          height: '48px',
         };
       }
 
       if (cell === 'CPU_2') {
         return {
           'background-image': 'url("/img/Pedina_rossa.png")',
-          width: '52px',
-          height: '52px',
+          width: '48px',
+          height: '48px',
         };
       }
       if (cell === null) {
         return {
           'background-image': 'url("/img/Cella_vuota.png")',
-          width: '52px',
-          height: '52px',
+          width: '48px',
+          height: '48px',
         };
       }
     }
 
+    // bp 768px
     if (this.screenSize! < 768) {
       if (cell === 'CPU_1') {
         return {
@@ -217,7 +221,8 @@ export class GameComponent {
       }
     }
 
-    if (this.screenSize! < 995) {
+    // bp 992px
+    if (this.screenSize! < 992) {
       if (cell === 'CPU_1') {
         return {
           'background-image': 'url("/img/Pedina_Gialla.png")',
@@ -241,6 +246,63 @@ export class GameComponent {
         };
       }
     }
+
+
+ // bp 1200px
+ if (this.screenSize! < 1200) {
+  if (cell === 'CPU_1') {
+    return {
+      'background-image': 'url("/img/Pedina_Gialla.png")',
+      width: '95px',
+      height: '95px',
+    };
+  }
+
+  if (cell === 'CPU_2') {
+    return {
+      'background-image': 'url("/img/Pedina_rossa.png")',
+      width: '95px',
+      height: '95px',
+    };
+  }
+  if (cell === null) {
+    return {
+      'background-image': 'url("/img/Cella_vuota.png")',
+      width: '95px',
+      height: '95px',
+    };
+  }
+}
+
+
+    // bp 1400px
+    if (this.screenSize! < 1400) {
+      if (cell === 'CPU_1') {
+        return {
+          'background-image': 'url("/img/Pedina_Gialla.png")',
+          width: '117px',
+          height: '117px',
+        };
+      }
+
+      if (cell === 'CPU_2') {
+        return {
+          'background-image': 'url("/img/Pedina_rossa.png")',
+          width: '117px',
+          height: '117px',
+        };
+      }
+      if (cell === null) {
+        return {
+          'background-image': 'url("/img/Cella_vuota.png")',
+          width: '117px',
+          height: '117px',
+        };
+      }
+    }
+
+
+
 
     if (cell === 'CPU_1') {
       return {
